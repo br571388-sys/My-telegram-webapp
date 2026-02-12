@@ -6,11 +6,14 @@
     <title>Anime Fanz Fz - Premium</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* Pro CSS styling */
+        /* --- CUSTOMIZATION SETTINGS --- */
         :root {
             --primary-orange: #ff8c00;
             --neon-pink: #fc00ff;
             --dark-bg: #121212;
+            --start-btn-bg: #ffffff; /* Button ke andar ka color yahan se badlo */
+            --start-text-color: #333; /* Text ka color */
+            --rest-interval: 500;    /* Click ke baad ka delay (ms) */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -23,10 +26,19 @@
             align-items: center;
             min-height: 100vh;
             color: white;
-            overflow-x: hidden;
+            overflow: hidden; /* Sprinkles ke liye overflow hide kiya */
         }
 
-        /* Top Orange Header with Move/Blink Animation */
+        /* Background Canvas for Sprinkles */
+        #sprinkles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Isse content ke piche rakhega */
+        }
+
         .header-bg {
             width: 100%;
             height: 180px;
@@ -37,6 +49,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            z-index: 10;
             animation: headerMove 4s ease-in-out infinite alternate;
         }
 
@@ -45,7 +58,6 @@
             100% { transform: translateY(5px); filter: brightness(1.2); }
         }
 
-        /* Neon Heading Highlighting */
         .main-title {
             font-size: 28px;
             font-weight: 800;
@@ -55,12 +67,6 @@
             animation: titleDrop 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
         }
 
-        @keyframes titleDrop {
-            0% { transform: translateY(-50px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Main Card Container */
         .container {
             width: 90%;
             max-width: 380px;
@@ -73,7 +79,6 @@
             z-index: 10;
         }
 
-        /* Neon Hyperlink (@Anime_Fanz_Fz) */
         .neon-link {
             display: inline-block;
             color: var(--neon-pink);
@@ -82,16 +87,10 @@
             text-decoration: none;
             margin-bottom: 20px;
             text-shadow: 0 0 5px var(--neon-pink);
-            transition: 0.3s;
             animation: neonPulse 1.5s infinite alternate;
         }
 
-        @keyframes neonPulse {
-            from { opacity: 0.7; text-shadow: 0 0 5px var(--neon-pink); }
-            to { opacity: 1; text-shadow: 0 0 15px var(--neon-pink), 0 0 25px var(--neon-pink); }
-        }
-
-        /* Advance Start Button with Image */
+        /* Start Button Customization */
         .start-btn-wrapper {
             position: relative;
             width: 150px;
@@ -104,25 +103,29 @@
             height: 100%;
             border-radius: 50%;
             border: 5px solid var(--primary-orange);
-            background: url('https://telegra.ph/file/06443494b9aa178e24458.jpg') center/cover; /* Replace with your image */
+            /* Button color change logic */
+            background-color: var(--start-btn-bg); 
+            background-image: url('https://telegra.ph/file/06443494b9aa178e24458.jpg'); /* Agar image hatani ho toh line delete kar do */
+            background-position: center;
+            background-size: cover;
+            
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 24px;
             font-weight: 900;
-            color: white;
-            text-shadow: 2px 2px 4px black;
+            color: var(--start-text-color);
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
             transition: 0.3s;
             box-shadow: 0 0 20px var(--primary-orange);
         }
 
         .start-btn:active {
             transform: scale(0.9);
-            filter: brightness(1.5);
+            filter: brightness(1.2);
         }
 
-        /* Action Buttons (Contact Us) */
         .action-link {
             display: block;
             width: 80%;
@@ -137,12 +140,21 @@
             transition: 0.3s;
         }
 
-        .action-link:hover { transform: translateY(-2px); background: #e0e0e0; }
-
         .footer-status { color: #888; font-size: 12px; margin-top: 15px; }
+        
+        @keyframes titleDrop {
+            0% { transform: translateY(-50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes neonPulse {
+            from { opacity: 0.7; text-shadow: 0 0 5px var(--neon-pink); }
+            to { opacity: 1; text-shadow: 0 0 15px var(--neon-pink), 0 0 25px var(--neon-pink); }
+        }
     </style>
 </head>
 <body>
+
+    <canvas id="sprinkles-canvas"></canvas>
 
     <div class="header-bg">
         <h1 class="main-title">@𝐀𝐍𝐈𝐌𝐄_𝐅𝐀𝐍𝐙_𝐅𝐙</h1>
@@ -158,7 +170,7 @@
         <a href="http://t.me/Anime_Fanz_Fzbot" class="action-link">CONTACT US</a>
         <a href="https://t.me/+g6PUdKTHp5FhZDJl" class="action-link">SUPPORT GROUP</a>
 
-        <p class="footer-status">Powered by Anime Fanz Fz</p>
+        <p class="footer-status">Powered by Anime fanz fz</p>
     </div>
 
     <audio id="tap-sound" preload="auto">
@@ -166,22 +178,69 @@
     </audio>
 
     <script>
+        // --- 1. SPRINKLES ANIMATION SCRIPT ---
+        const canvas = document.getElementById('sprinkles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * 1 + 0.5;
+                this.color = Math.random() > 0.5 ? '#ff8c00' : '#fc00ff';
+                this.opacity = Math.random();
+            }
+            update() {
+                this.y += this.speedY;
+                if (this.y > canvas.height) this.y = -10;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < 50; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        init();
+        animate();
+
+        // --- 2. TELEGRAM & BUTTON LOGIC ---
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
 
         const urlParams = new URLSearchParams(window.location.search);
         const targetUrl = urlParams.get('target');
-
         const startBtn = document.getElementById('main-action');
         const sound = document.getElementById('tap-sound');
 
+        // Custom Settings from Root
+        const restInterval = getComputedStyle(document.documentElement).getPropertyValue('--rest-interval');
+
         startBtn.addEventListener('click', () => {
-            // Tap Sound Play
             sound.currentTime = 0;
             sound.play().catch(e => console.log("Sound error"));
 
-            // Visual feedback
             startBtn.style.boxShadow = "0 0 40px #fc00ff";
             
             setTimeout(() => {
@@ -190,9 +249,8 @@
                 } else {
                     alert("Error: Link not found!");
                 }
-            }, 500);
+            }, parseInt(restInterval));
         });
     </script>
 </body>
 </html>
-
