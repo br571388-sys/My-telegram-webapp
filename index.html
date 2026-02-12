@@ -3,77 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Redirector</title>
+    <title>Anime Fanz Fz - Premium</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* Modern Design Settings */
+        /* Pro CSS styling */
+        :root {
+            --primary-orange: #ff8c00;
+            --neon-pink: #fc00ff;
+            --dark-bg: #121212;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
+            background-color: var(--dark-bg);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Top Orange Header with Move/Blink Animation */
+        .header-bg {
+            width: 100%;
+            height: 180px;
+            background: var(--primary-orange);
+            border-bottom-left-radius: 50% 30px;
+            border-bottom-right-radius: 50% 30px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background: #0f0c29; /* Dark premium background */
-            background: linear-gradient(to bottom, #24243e, #302b63, #0f0c29);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-            color: white;
+            position: relative;
+            animation: headerMove 4s ease-in-out infinite alternate;
         }
 
+        @keyframes headerMove {
+            0% { transform: translateY(0); filter: brightness(1); }
+            100% { transform: translateY(5px); filter: brightness(1.2); }
+        }
+
+        /* Neon Heading Highlighting */
+        .main-title {
+            font-size: 28px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px var(--primary-orange);
+            animation: titleDrop 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+
+        @keyframes titleDrop {
+            0% { transform: translateY(-50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Main Card Container */
         .container {
+            width: 90%;
+            max-width: 380px;
+            background: white;
+            margin-top: -40px;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             text-align: center;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+            z-index: 10;
         }
 
-        h2 { margin-bottom: 20px; font-weight: 300; letter-spacing: 1px; }
+        /* Neon Hyperlink (@Anime_Fanz_Fz) */
+        .neon-link {
+            display: inline-block;
+            color: var(--neon-pink);
+            font-weight: 700;
+            font-size: 20px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px var(--neon-pink);
+            transition: 0.3s;
+            animation: neonPulse 1.5s infinite alternate;
+        }
 
-        /* Round Button Styling */
-        #action-btn {
-            width: 140px;
-            height: 140px;
+        @keyframes neonPulse {
+            from { opacity: 0.7; text-shadow: 0 0 5px var(--neon-pink); }
+            to { opacity: 1; text-shadow: 0 0 15px var(--neon-pink), 0 0 25px var(--neon-pink); }
+        }
+
+        /* Advance Start Button with Image */
+        .start-btn-wrapper {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+        }
+
+        .start-btn {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            border: none;
-            outline: none;
-            background: linear-gradient(45deg, #00dbde, #fc00ff);
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
+            border: 5px solid var(--primary-orange);
+            background: url('https://telegra.ph/file/06443494b9aa178e24458.jpg') center/cover; /* Replace with your image */
             cursor: pointer;
-            box-shadow: 0 0 30px rgba(0, 219, 222, 0.5);
-            transition: all 0.3s ease;
-            animation: pulse 2s infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 2px 2px 4px black;
+            transition: 0.3s;
+            box-shadow: 0 0 20px var(--primary-orange);
         }
 
-        #action-btn:active {
-            transform: scale(0.85);
-            box-shadow: 0 0 10px rgba(252, 0, 255, 0.8);
+        .start-btn:active {
+            transform: scale(0.9);
+            filter: brightness(1.5);
         }
 
-        /* Animation for the button */
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 219, 222, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(0, 219, 222, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 219, 222, 0); }
+        /* Action Buttons (Contact Us) */
+        .action-link {
+            display: block;
+            width: 80%;
+            margin: 15px auto;
+            padding: 12px;
+            background: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: 0.3s;
         }
 
-        .status { margin-top: 15px; font-size: 12px; opacity: 0.6; }
+        .action-link:hover { transform: translateY(-2px); background: #e0e0e0; }
+
+        .footer-status { color: #888; font-size: 12px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Welcome to WebApp</h2>
-        <button id="action-btn">Click here...</button>
-        <p class="status">Please click to continue</p>
+    <div class="header-bg">
+        <h1 class="main-title">@Anime_Fanz_Fz</h1>
     </div>
 
-    <audio id="click-sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+    <div class="container">
+        <a href="https://t.me/+bxLawCRx2pw0MjU1" class="neon-link">@Anime_Fanz_Fz</a>
+
+        <div class="start-btn-wrapper">
+            <div id="main-action" class="start-btn">START</div>
+        </div>
+
+        <a href="#" class="action-link">CONTACT US</a>
+        <a href="#" class="action-link">SUPPORT GROUP</a>
+
+        <p class="footer-status">Powered by Anime Fanz Fz</p>
+    </div>
+
+    <audio id="tap-sound" preload="auto">
+        <source src="https://www.soundjay.com/buttons/sounds/button-16.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         const tg = window.Telegram.WebApp;
@@ -81,53 +171,28 @@
         tg.ready();
 
         const urlParams = new URLSearchParams(window.location.search);
-        const destination = urlParams.get('target');
+        const targetUrl = urlParams.get('target');
 
-        document.getElementById('action-btn').addEventListener('click', () => {
-            const sound = document.getElementById('click-sound');
-            sound.play();
+        const startBtn = document.getElementById('main-action');
+        const sound = document.getElementById('tap-sound');
 
-            // Button animation effect
-            document.getElementById('action-btn').style.background = "#fff";
-            document.getElementById('action-btn').style.color = "#000";
+        startBtn.addEventListener('click', () => {
+            // Tap Sound Play
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log("Sound error"));
 
+            // Visual feedback
+            startBtn.style.boxShadow = "0 0 40px #fc00ff";
+            
             setTimeout(() => {
-                if (destination) {
-                    window.location.href = decodeURIComponent(destination);
+                if (targetUrl) {
+                    window.location.href = decodeURIComponent(targetUrl);
                 } else {
-                    alert("Main link not found! Please send link to bot again.");
+                    alert("Error: Link not found!");
                 }
-            }, 600); // Thoda delay taaki sound sunai de
+            }, 500);
         });
     </script>
 </body>
 </html>
 
-    <button id="action-btn">Click here...</button>
-
-    <audio id="click-sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand(); // Web app ko full screen karne ke liye
-
-        // URL se 'target' parameter nikalne ke liye
-        const urlParams = new URLSearchParams(window.location.search);
-        const destination = urlParams.get('target');
-
-        document.getElementById('action-btn').addEventListener('click', () => {
-            const sound = document.getElementById('click-sound');
-            sound.play();
-
-            // Sound khatam hone ke baad redirect
-            setTimeout(() => {
-                if (destination) {
-                    window.location.href = decodeURIComponent(destination);
-                } else {
-                    alert("No link found!");
-                }
-            }, 500); 
-        });
-    </script>
-</body>
-</html>
