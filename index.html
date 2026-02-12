@@ -3,37 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web App Redirector</title>
+    <title>Secure Redirector</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* Modern Design Settings */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #1a1a1a;
-            font-family: Arial, sans-serif;
+            background: #0f0c29; /* Dark premium background */
+            background: linear-gradient(to bottom, #24243e, #302b63, #0f0c29);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            color: white;
         }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+        }
+
+        h2 { margin-bottom: 20px; font-weight: 300; letter-spacing: 1px; }
+
+        /* Round Button Styling */
         #action-btn {
-            width: 150px;
-            height: 150px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             border: none;
-            background: radial-gradient(circle, #ff4b2b, #ff416c);
+            outline: none;
+            background: linear-gradient(45deg, #00dbde, #fc00ff);
             color: white;
-            font-weight: bold;
             font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(255, 75, 43, 0.5);
-            transition: transform 0.2s;
+            box-shadow: 0 0 30px rgba(0, 219, 222, 0.5);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
         }
+
         #action-btn:active {
-            transform: scale(0.9);
+            transform: scale(0.85);
+            box-shadow: 0 0 10px rgba(252, 0, 255, 0.8);
         }
+
+        /* Animation for the button */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 219, 222, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(0, 219, 222, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 219, 222, 0); }
+        }
+
+        .status { margin-top: 15px; font-size: 12px; opacity: 0.6; }
     </style>
 </head>
 <body>
+
+    <div class="container">
+        <h2>Welcome to WebApp</h2>
+        <button id="action-btn">Click here...</button>
+        <p class="status">Please click to continue</p>
+    </div>
+
+    <audio id="click-sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const destination = urlParams.get('target');
+
+        document.getElementById('action-btn').addEventListener('click', () => {
+            const sound = document.getElementById('click-sound');
+            sound.play();
+
+            // Button animation effect
+            document.getElementById('action-btn').style.background = "#fff";
+            document.getElementById('action-btn').style.color = "#000";
+
+            setTimeout(() => {
+                if (destination) {
+                    window.location.href = decodeURIComponent(destination);
+                } else {
+                    alert("Main link not found! Please send link to bot again.");
+                }
+            }, 600); // Thoda delay taaki sound sunai de
+        });
+    </script>
+</body>
+</html>
 
     <button id="action-btn">Click here...</button>
 
