@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web App Redirector</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a1a;
+            font-family: Arial, sans-serif;
+        }
+        #action-btn {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: none;
+            background: radial-gradient(circle, #ff4b2b, #ff416c);
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 75, 43, 0.5);
+            transition: transform 0.2s;
+        }
+        #action-btn:active {
+            transform: scale(0.9);
+        }
+    </style>
+</head>
+<body>
+
+    <button id="action-btn">Click here...</button>
+
+    <audio id="click-sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Web app ko full screen karne ke liye
+
+        // URL se 'target' parameter nikalne ke liye
+        const urlParams = new URLSearchParams(window.location.search);
+        const destination = urlParams.get('target');
+
+        document.getElementById('action-btn').addEventListener('click', () => {
+            const sound = document.getElementById('click-sound');
+            sound.play();
+
+            // Sound khatam hone ke baad redirect
+            setTimeout(() => {
+                if (destination) {
+                    window.location.href = decodeURIComponent(destination);
+                } else {
+                    alert("No link found!");
+                }
+            }, 500); 
+        });
+    </script>
+</body>
+</html>
