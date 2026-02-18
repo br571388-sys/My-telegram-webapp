@@ -181,6 +181,8 @@
 </head>
 <body>
 
+<audio id="click-sound" src="https://www.soundjay.com/buttons_c2026/sounds/button-3.mp3" preload="auto"></audio>
+
 <div class="bg-canvas"></div>
 
 <div class="header">
@@ -222,49 +224,62 @@
 </div>
 
 <script>
+    /* --- CONFIGURATION --- */
+    const REST_INTERVAL = 200; // Animation duration in ms
+
+    // Telegram initialization
     const tg = window.Telegram.WebApp;
     tg.expand();
     tg.ready();
 
-    // Saare buttons ko select kiya
+    // Elements selection
     const allButtons = document.querySelectorAll('.tap-btn');
+    const sound = document.getElementById('click-sound');
 
     allButtons.forEach(btn => {
         btn.addEventListener('click', function(e) {
-            e.preventDefault(); // Default jump rokhne ke liye
+            e.preventDefault();
             const targetUrl = this.getAttribute('href');
+            
+            // 1. Sound Logic
+            if (sound) {
+                sound.currentTime = 0; 
+                sound.play().catch(err => console.log("Audio play blocked"));
+            }
 
-            // 1. Haptic Feedback
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+            // 2. Haptic Feedback
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
 
-            // 2. Add Clicking Effect
+            // 3. Visual Click Effect
             this.classList.add('click-active');
 
-            // 3. Reset after animation and redirect
+            // 4. Redirect after Interval
             setTimeout(() => {
                 this.classList.remove('click-active');
                 
-                // Redirect logic
                 if (targetUrl) {
                     window.location.href = targetUrl;
                 } else if (this.id === 'main-btn') {
-                    // Explore button specialized logic
+                    // Explore button logic
                     const urlParams = new URLSearchParams(window.location.search);
                     const target = urlParams.get('target');
                     if (target) {
                         window.location.href = decodeURIComponent(target);
                     } else {
-                        tg.showPopup({ message: 'Target missing!' });
+                        tg.showPopup({ message: 'Target URL missing!' });
                     }
                 }
-            }, 200); // 200ms baad wapas normal ho jayega
+            }, REST_INTERVAL); 
         });
     });
 
+    // Back Button Control
     tg.BackButton.show();
     tg.BackButton.onClick(() => tg.close());
 </script>
 
+
 </body>
 </html>
-
