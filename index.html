@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Anime Fanz Fz - Anime Provider</title>
+    <title>Anime Fanz Fz - Ultra Premium</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -176,12 +176,64 @@
             color: rgba(255,255,255,0.2);
             font-weight: 700;
         }
+        
+        /* --- NEW NEON SPARKLES EFFECT --- */
+.sparkle-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Taaki buttons click karne mein problem na ho */
+    z-index: 0;
+}
+
+.sparkle {
+    position: absolute;
+    bottom: -10px;
+    width: 4px;
+    height: 4px;
+    background: #00f2ff; /* Blue Neon Color */
+    border-radius: 50%;
+    box-shadow: 0 0 10px #00f2ff, 0 0 20px #00f2ff;
+    animation: rise 4s infinite linear;
+    opacity: 0;
+}
+
+@keyframes rise {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+}
+
+/* --- HEADER COLOR CHANGE ON HOVER --- */
+.header {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, #ff8c00, #ff00ff, #00f2ff);
+    background-size: 300% 300%;
+    animation: flow 8s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
+    margin-bottom: 20px;
+    transition: background 0.5s ease; /* Smooth transition ke liye */
+}
+
+/* Jab mouse ya touch header ke paas jaye (Desktop/Mobile dono ke liye) */
+.header:hover {
+    background: linear-gradient(135deg, #ff0000, #990000, #ff4d4d) !important;
+    animation: none; /* Hover par flow stop karke red dikhane ke liye */
+}
+
 
     </style>
 </head>
 <body>
 
 <audio id="click-sound" preload="auto"></audio>
+
+<div class="sparkle-container" id="sparkle-box"></div>
 
 
 <div class="bg-canvas"></div>
@@ -225,6 +277,35 @@
 </div>
 
 <script>
+
+/* --- SPARKLE GENERATOR --- */
+function createSparkle() {
+    const container = document.getElementById('sparkle-box');
+    const sparkle = document.createElement('div');
+    
+    sparkle.classList.add('sparkle');
+    
+    // Random position horizontal (baayein se daayein)
+    const posX = Math.random() * window.innerWidth;
+    sparkle.style.left = posX + 'px';
+    
+    // Random size aur animation delay
+    const size = Math.random() * 4 + 2;
+    sparkle.style.width = size + 'px';
+    sparkle.style.height = size + 'px';
+    sparkle.style.animationDuration = (Math.random() * 2 + 3) + 's';
+    
+    container.appendChild(sparkle);
+    
+    // Purane sparkles ko delete karna taaki browser hang na ho
+    setTimeout(() => {
+        sparkle.remove();
+    }, 4000);
+}
+
+// Har 200ms mein ek naya sparkle banega
+setInterval(createSparkle, 200);
+
     /* --- CONFIGURATION --- */
     const REST_INTERVAL = 200; 
 
@@ -293,3 +374,4 @@
 
 </body>
 </html>
+
