@@ -112,7 +112,7 @@
             border-radius: 4px 0 0 4px;
         }
 
-        /* Explore Center Button */
+        /* Start Center Button */
         .btn-container { position: relative; width: 150px; height: 150px; margin: 0 auto 25px; }
         .orbit {
             position: absolute; inset: 0;
@@ -124,7 +124,7 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .explore-btn {
+        .start-btn {
             position: absolute; inset: 10px;
             background: url('https://files.catbox.moe/52799g.jpg') center/cover;
             border-radius: 50%;
@@ -181,7 +181,8 @@
 </head>
 <body>
 
-<audio id="click-sound" src="https://www.soundjay.com/buttons_c2026/sounds/button-3.mp3" preload="auto"></audio>
+<audio id="click-sound" preload="auto"></audio>
+
 
 <div class="bg-canvas"></div>
 
@@ -200,7 +201,7 @@
 
     <div class="btn-container">
         <div class="orbit"></div>
-        <div id="main-btn" class="explore-btn tap-btn">EXPLORE</div>
+        <div id="main-btn" class="start-btn tap-btn">START</div>
     </div>
 
     <div class="actions">
@@ -225,44 +226,53 @@
 
 <script>
     /* --- CONFIGURATION --- */
-    const REST_INTERVAL = 200; // Animation duration in ms
+    const REST_INTERVAL = 200; 
 
-    // Telegram initialization
+    // Yahan apne saare sound URLs add karein
+    const SOUND_LIST = [
+        "https://www.soundjay.com/buttons_c2026/sounds/button-3.mp3",
+        "https://files.catbox.moe/6h33lc.mp3",
+        "https://files.catbox.moe/wzj0v9.mp3",
+        "https://files.catbox.moe/axmlfj.mp3",
+        "https://files.catbox.moe/5bt3eg.mp3",
+        "https://files.catbox.moe/db4by6.mp3",
+        "https://files.catbox.moe/2asf5w.mp3",
+        "https://files.catbox.moe/f7pwz9.mp3"
+    ];
+
     const tg = window.Telegram.WebApp;
     tg.expand();
     tg.ready();
 
-    // Elements selection
     const allButtons = document.querySelectorAll('.tap-btn');
-    const sound = document.getElementById('click-sound');
+    const audioElement = document.getElementById('click-sound');
 
     allButtons.forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const targetUrl = this.getAttribute('href');
             
-            // 1. Sound Logic
-            if (sound) {
-                sound.currentTime = 0; 
-                sound.play().catch(err => console.log("Audio play blocked"));
+            // --- RANDOM SOUND LOGIC ---
+            if (audioElement) {
+                // Randomly ek URL select karna
+                const randomSound = SOUND_LIST[Math.floor(Math.random() * SOUND_LIST.length)];
+                audioElement.src = randomSound; 
+                audioElement.currentTime = 0; 
+                audioElement.play().catch(err => console.log("Audio blocked"));
             }
 
-            // 2. Haptic Feedback
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('medium');
             }
 
-            // 3. Visual Click Effect
             this.classList.add('click-active');
 
-            // 4. Redirect after Interval
             setTimeout(() => {
                 this.classList.remove('click-active');
                 
                 if (targetUrl) {
                     window.location.href = targetUrl;
                 } else if (this.id === 'main-btn') {
-                    // Explore button logic
                     const urlParams = new URLSearchParams(window.location.search);
                     const target = urlParams.get('target');
                     if (target) {
@@ -275,11 +285,12 @@
         });
     });
 
-    // Back Button Control
     tg.BackButton.show();
     tg.BackButton.onClick(() => tg.close());
 </script>
 
 
+
 </body>
 </html>
+
