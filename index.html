@@ -296,130 +296,120 @@
 </div>
 
 <script>
+/* =========================================
+   --- CUSTOMIZABLE SETTINGS (TOP) ---
+   =========================================
+*/
+const SETTINGS = {
+    rest_interval: 300,        // Click ke kitni der baad link khulegi (ms)
+    use_base64: true,          // Base64 decoding ON rakhne ke liye true karein
+    particle_count: 12,        // Click par kitne fire sparks nikalenge
+    sparkle_speed: 200,        // Background neon dots ki speed
+    error_msg: 'Link Expired or Invalid!' // Agar link galat ho toh message
+};
 
-/* --- SPARKLE GENERATOR --- */
+// Tumhari Sound List
+const SOUND_LIST = [
+    "https://www.soundjay.com/buttons_c2026/sounds/button-3.mp3",
+    "https://files.catbox.moe/6h33lc.mp3",
+    "https://files.catbox.moe/wzj0v9.mp3",
+    "https://files.catbox.moe/axmlfj.mp3",
+    "https://files.catbox.moe/5bt3eg.mp3",
+    "https://files.catbox.moe/db4by6.mp3",
+    "https://files.catbox.moe/2asf5w.mp3",
+    "https://files.catbox.moe/f7pwz9.mp3"
+];
+
+/* --- CORE LOGIC (Don't change unless needed) --- */
+
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.ready();
+
+const audioElement = document.getElementById('click-sound');
+
+// 1. Sparkle Generator (Neon Background)
 function createSparkle() {
     const container = document.getElementById('sparkle-box');
     const sparkle = document.createElement('div');
-    
     sparkle.classList.add('sparkle');
-    
-    // Random position horizontal (baayein se daayein)
-    const posX = Math.random() * window.innerWidth;
-    sparkle.style.left = posX + 'px';
-    
-    // Random size aur animation delay
+    sparkle.style.left = Math.random() * window.innerWidth + 'px';
     const size = Math.random() * 4 + 2;
     sparkle.style.width = size + 'px';
     sparkle.style.height = size + 'px';
     sparkle.style.animationDuration = (Math.random() * 2 + 3) + 's';
-    
     container.appendChild(sparkle);
-    
-    // Purane sparkles ko delete karna taaki browser hang na ho
-    setTimeout(() => {
-        sparkle.remove();
-    }, 4000);
+    setTimeout(() => sparkle.remove(), 4000);
 }
+setInterval(createSparkle, SETTINGS.sparkle_speed);
 
-// Har 200ms mein ek naya sparkle banega
-setInterval(createSparkle, 200);
+// 2. Button Click & Decoding Logic
+const allButtons = document.querySelectorAll('.tap-btn');
 
-    /* --- CONFIGURATION --- */
-    const REST_INTERVAL = 200; 
+allButtons.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetUrl = this.getAttribute('href');
+        
+        // Sound Play Logic
+        if (audioElement) {
+            const randomSound = SOUND_LIST[Math.floor(Math.random() * SOUND_LIST.length)];
+            audioElement.src = randomSound; 
+            audioElement.currentTime = 0; 
+            audioElement.play().catch(err => console.log("Audio blocked"));
+        }
 
-    // Yahan apne saare sound URLs add karein
-    const SOUND_LIST = [
-        "https://www.soundjay.com/buttons_c2026/sounds/button-3.mp3",
-        "https://files.catbox.moe/6h33lc.mp3",
-        "https://files.catbox.moe/wzj0v9.mp3",
-        "https://files.catbox.moe/axmlfj.mp3",
-        "https://files.catbox.moe/5bt3eg.mp3",
-        "https://files.catbox.moe/db4by6.mp3",
-        "https://files.catbox.moe/2asf5w.mp3",
-        "https://files.catbox.moe/f7pwz9.mp3"
-    ];
+        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        this.classList.add('click-active');
 
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    tg.ready();
-
-    const allButtons = document.querySelectorAll('.tap-btn');
-    const audioElement = document.getElementById('click-sound');
-
-    allButtons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetUrl = this.getAttribute('href');
+        setTimeout(() => {
+            this.classList.remove('click-active');
             
-            // --- RANDOM SOUND LOGIC ---
-            if (audioElement) {
-                // Randomly ek URL select karna
-                const randomSound = SOUND_LIST[Math.floor(Math.random() * SOUND_LIST.length)];
-                audioElement.src = randomSound; 
-                audioElement.currentTime = 0; 
-                audioElement.play().catch(err => console.log("Audio blocked"));
-            }
-
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
-
-            this.classList.add('click-active');
-
-            setTimeout(() => {
-                this.classList.remove('click-active');
+            if (targetUrl) {
+                // Normal links (Telegram Hub, Admin, etc.)
+                window.location.href = targetUrl;
+            } else if (this.id === 'main-btn') {
+                // START Button Logic with Base64 Decoding
+                const urlParams = new URLSearchParams(window.location.search);
+                let target = urlParams.get('target');
                 
-                if (targetUrl) {
-                    window.location.href = targetUrl;
-                } else if (this.id === 'main-btn') {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const target = urlParams.get('target');
-                    if (target) {
-                        window.location.href = decodeURIComponent(target);
-                    } else {
-                        tg.showPopup({ message: 'Target URL missing!' });
+                if (target) {
+                    try {
+                        // Agar SETTINGS.use_base64 true hai toh decode karega
+                        let finalLink = SETTINGS.use_base64 ? atob(target) : decodeURIComponent(target);
+                        window.location.href = finalLink;
+                    } catch(err) {
+                        console.error("Decoding error:", err);
+                        tg.showPopup({ message: SETTINGS.error_msg });
                     }
+                } else {
+                    tg.showPopup({ message: 'Target URL missing!' });
                 }
-            }, REST_INTERVAL); 
-        });
+            }
+        }, SETTINGS.rest_interval); 
     });
+});
 
-    tg.BackButton.show();
-    tg.BackButton.onClick(() => tg.close());
-    
-    window.addEventListener('click', function(e) {
-    // Fire Sparkles Logic for everywhere on screen
-    const particleCount = 12; // Kitne particles nikalenge
-    
-    for (let i = 0; i < particleCount; i++) {
+// 3. Fire Particles Effect
+window.addEventListener('click', function(e) {
+    for (let i = 0; i < SETTINGS.particle_count; i++) {
         const particle = document.createElement('div');
         particle.className = 'fire-particle';
-        
-        // Random direction aur speed
         const angle = Math.random() * Math.PI * 2;
         const velocity = Math.random() * 120 + 30;
-        const tx = Math.cos(angle) * velocity + 'px';
-        const ty = Math.sin(angle) * velocity + 'px';
-
-        // Mouse ya Touch ki exact position
         particle.style.left = e.clientX + 'px';
         particle.style.top = e.clientY + 'px';
-        
-        particle.style.setProperty('--tx', tx);
-        particle.style.setProperty('--ty', ty);
-
+        particle.style.setProperty('--tx', Math.cos(angle) * velocity + 'px');
+        particle.style.setProperty('--ty', Math.sin(angle) * velocity + 'px');
         document.body.appendChild(particle);
-
-        // Particle ko remove karna
-        setTimeout(() => {
-            particle.remove();
-        }, 700);
+        setTimeout(() => particle.remove(), 700);
     }
 });
 
-</script>
+tg.BackButton.show();
+tg.BackButton.onClick(() => tg.close());
 
+</script>
 
 
 </body>
