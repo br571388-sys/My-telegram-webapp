@@ -5,312 +5,714 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Anime Fanz Fz - Anime Provider</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Exo+2:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <style>
-    
+    :root {
+        --orange: #ff6a00;
+        --pink: #ff007a;
+        --cyan: #00ffe0;
+        --purple: #9b00ff;
+        --bg: #020510;
+        --glass: rgba(255,255,255,0.04);
+        --rest-interval: 300ms;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+        background-color: var(--bg);
+        font-family: 'Exo 2', sans-serif;
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* =====================
+       ANIMATED BACKGROUND
+    ===================== */
+    .bg-scene {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    /* Slow moving gradient aurora */
+    .bg-scene::before {
+        content: '';
+        position: absolute;
+        inset: -50%;
+        background: 
+            radial-gradient(ellipse 60% 40% at 20% 30%, rgba(255,106,0,0.12) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 50% at 80% 70%, rgba(155,0,255,0.12) 0%, transparent 60%),
+            radial-gradient(ellipse 70% 40% at 50% 90%, rgba(0,255,224,0.08) 0%, transparent 60%);
+        animation: aurora-drift 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes aurora-drift {
+        0%   { transform: translate(0,0) scale(1); }
+        33%  { transform: translate(-4%, 3%) scale(1.05); }
+        66%  { transform: translate(4%, -3%) scale(0.97); }
+        100% { transform: translate(-2%, 5%) scale(1.03); }
+    }
+
+    /* Grid lines overlay */
+    .bg-scene::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(0,255,224,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,255,224,0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        animation: grid-pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes grid-pulse {
+        0%,100% { opacity: 0.5; }
+        50%      { opacity: 1; }
+    }
+
+    /* Floating glowing orbs */
+    .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: -1;
+        animation: orb-float linear infinite;
+        pointer-events: none;
+    }
+    .orb-1 { width:280px; height:280px; background:rgba(255,0,122,0.15); top:-10%; left:-10%; animation-duration:22s; }
+    .orb-2 { width:220px; height:220px; background:rgba(0,255,224,0.12); bottom:-5%; right:-5%; animation-duration:18s; animation-delay:-9s; }
+    .orb-3 { width:180px; height:180px; background:rgba(155,0,255,0.15); top:40%; left:-8%; animation-duration:25s; animation-delay:-5s; }
+
+    @keyframes orb-float {
+        0%,100% { transform: translateY(0) scale(1); }
+        50%      { transform: translateY(-40px) scale(1.08); }
+    }
+
+    /* Scan line */
+    .scan-line {
+        position: fixed;
+        top: -2px; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+        animation: scan 6s linear infinite;
+        z-index: 100;
+        opacity: 0.4;
+        pointer-events: none;
+    }
+    @keyframes scan {
+        0%   { top: -2px; }
+        100% { top: 100vh; }
+    }
+
+    /* =====================
+       HEADER
+    ===================== */
+    .header {
+        width: 100%;
+        height: 200px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        margin-bottom: 24px;
+    }
+
+    /* Header aurora background */
+    .header::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(160deg, #1a0028 0%, #050018 50%, #001a1a 100%);
+    }
+
+    /* Header top glow band */
+    .header::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--orange), var(--pink), var(--purple), var(--cyan), var(--orange));
+        background-size: 200% 100%;
+        animation: stripe-slide 3s linear infinite;
+    }
+    @keyframes stripe-slide { to { background-position: 200% 0; } }
+
+    /* Diagonal slash accent */
+    .header-slash {
+        position: absolute;
+        top: 0; right: 0; bottom: 0;
+        width: 50%;
+        background: linear-gradient(135deg, transparent 40%, rgba(255,0,122,0.06) 100%);
+        clip-path: polygon(60% 0, 100% 0, 100% 100%, 20% 100%);
+    }
+
+    .header-bottom-clip {
+        position: absolute;
+        bottom: -1px; left: 0; right: 0;
+        height: 40px;
+        background: var(--bg);
+        clip-path: polygon(0 100%, 50% 0%, 100% 100%);
+    }
+
+    .logo-wrap {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+
+    .logo-tag {
+        font-size: 10px;
+        letter-spacing: 6px;
+        color: var(--cyan);
+        font-weight: 300;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        animation: fade-in-down 0.8s ease both;
+        opacity: 0.7;
+    }
+
+    .main-title {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: clamp(22px, 7vw, 30px);
+        font-weight: 700;
+        letter-spacing: 8px;
+        text-transform: uppercase;
+        position: relative;
+        animation: fade-in-up 0.8s ease both 0.2s;
+        line-height: 1;
+    }
+
+    /* Glitch effect on title */
+    .main-title::before,
+    .main-title::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%;
+    }
+    .main-title::before {
+        color: var(--pink);
+        clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+        animation: glitch-top 5s infinite linear;
+    }
+    .main-title::after {
+        color: var(--cyan);
+        clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+        animation: glitch-bottom 5s infinite linear;
+    }
+    @keyframes glitch-top {
+        0%,90%,100% { transform: translate(0); opacity: 0; }
+        92% { transform: translate(-3px, -1px); opacity: 0.8; }
+        94% { transform: translate(3px,  1px); opacity: 0.8; }
+        96% { transform: translate(-2px, 0);   opacity: 0.8; }
+    }
+    @keyframes glitch-bottom {
+        0%,90%,100% { transform: translate(0); opacity: 0; }
+        93% { transform: translate(3px,  1px); opacity: 0.6; }
+        95% { transform: translate(-3px,-1px); opacity: 0.6; }
+        97% { transform: translate(2px,  0);   opacity: 0.6; }
+    }
+
+    .logo-sub {
+        font-size: 9px;
+        letter-spacing: 4px;
+        color: rgba(255,255,255,0.3);
+        margin-top: 10px;
+        text-transform: uppercase;
+        animation: fade-in-up 0.8s ease both 0.4s;
+    }
+
+    @keyframes fade-in-up   { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fade-in-down { from { opacity:0; transform:translateY(-15px); } to { opacity:1; transform:translateY(0); } }
+
+    /* =====================
+       CARD
+    ===================== */
+    .card {
+        width: 92%;
+        max-width: 400px;
+        background: var(--glass);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border-radius: 28px;
+        padding: 28px 20px;
+        border: 1px solid rgba(255,255,255,0.06);
+        text-align: center;
+        position: relative;
+        animation: fade-in-up 0.8s ease both 0.5s;
+    }
+
+    /* Corner accents */
+    .card::before, .card::after {
+        content: '';
+        position: absolute;
+        width: 24px; height: 24px;
+        border-color: var(--cyan);
+        border-style: solid;
+    }
+    .card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; border-radius: 8px 0 0 0; }
+    .card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; border-radius: 0 0 8px 0; }
+
+    /* =====================
+       HUB BUTTON (Telegram)
+    ===================== */
+    .hub-btn {
+        background: linear-gradient(135deg, rgba(0,200,180,0.08), rgba(0,100,150,0.08));
+        border: 1px solid rgba(0,255,224,0.15);
+        border-radius: 16px;
+        padding: 15px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-decoration: none;
+        color: white;
+        margin-bottom: 28px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    }
+
+    .hub-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, transparent 0%, rgba(0,255,224,0.06) 100%);
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .hub-btn:hover::before, .hub-btn:active::before { opacity: 1; }
+
+    /* Animated left border */
+    .hub-btn-accent {
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 3px;
+        background: linear-gradient(180deg, var(--cyan), var(--purple));
+        border-radius: 3px 0 0 3px;
+        box-shadow: 0 0 12px var(--cyan);
+        animation: accent-pulse 2s ease-in-out infinite;
+    }
+    @keyframes accent-pulse {
+        0%,100% { opacity: 1; box-shadow: 0 0 8px var(--cyan); }
+        50%      { opacity: 0.6; box-shadow: 0 0 20px var(--cyan), 0 0 40px var(--purple); }
+    }
+
+    .hub-btn-text { 
+        display: flex; align-items: center; gap: 10px; 
+        font-weight: 700; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+    }
+
+    .tg-icon { 
+        font-size: 20px; 
+        color: var(--cyan); 
+        filter: drop-shadow(0 0 8px var(--cyan)); 
+        animation: icon-bounce 3s ease-in-out infinite; 
+    }
+    @keyframes icon-bounce {
+        0%,100% { transform: translateY(0); }
+        50%      { transform: translateY(-4px); }
+    }
+
+    .hub-arrow {
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        background: rgba(0,255,224,0.1);
+        border: 1px solid rgba(0,255,224,0.3);
+        display: flex; align-items: center; justify-content: center;
+        color: var(--cyan);
+        font-size: 12px;
+        transition: transform 0.2s;
+    }
+
+    /* =====================
+       CENTER START BUTTON
+    ===================== */
+    .btn-container {
+        position: relative;
+        width: 160px; height: 160px;
+        margin: 0 auto 28px;
+    }
+
+    /* Outer spinning ring */
+    .orbit-outer {
+        position: absolute; inset: -6px;
+        border-radius: 50%;
+        border: 1.5px solid transparent;
+        border-top-color: var(--pink);
+        border-right-color: var(--orange);
+        animation: orbit-spin 3s linear infinite;
+        box-shadow: 0 0 15px rgba(255,0,122,0.3);
+    }
+    /* Inner counter-spinning ring */
+    .orbit-inner {
+        position: absolute; inset: 6px;
+        border-radius: 50%;
+        border: 1px solid transparent;
+        border-bottom-color: var(--cyan);
+        border-left-color: var(--purple);
+        animation: orbit-spin 2s linear infinite reverse;
+    }
+    @keyframes orbit-spin { to { transform: rotate(360deg); } }
+
+    /* Rotating dots on outer ring */
+    .orbit-dot {
+        position: absolute; inset: -12px;
+        animation: orbit-spin 4s linear infinite;
+        border-radius: 50%;
+    }
+    .orbit-dot::before {
+        content: '';
+        position: absolute;
+        top: 50%; left: 0;
+        width: 8px; height: 8px;
+        background: var(--orange);
+        border-radius: 50%;
+        transform: translateY(-50%);
+        box-shadow: 0 0 12px var(--orange), 0 0 24px var(--pink);
+    }
+
+    /* Pulsing glow ring */
+    .glow-ring {
+        position: absolute; inset: -14px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,106,0,0.2);
+        animation: glow-pulse 2s ease-in-out infinite;
+    }
+    @keyframes glow-pulse {
+        0%,100% { transform: scale(1); opacity: 0.4; box-shadow: 0 0 0px rgba(255,106,0,0); }
+        50%      { transform: scale(1.04); opacity: 0.8; box-shadow: 0 0 30px rgba(255,106,0,0.3); }
+    }
+
+    .start-btn {
+        position: absolute; inset: 0;
+        background: url('https://files.catbox.moe/52799g.jpg') center/cover;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 12px;
+        letter-spacing: 3px;
+        color: white;
+        overflow: hidden;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 2px solid rgba(255,255,255,0.15);
+    }
+
+    /* Start button overlay shimmer */
+    .start-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,106,0,0.2), rgba(255,0,122,0.2));
+        border-radius: 50%;
+    }
+
+    /* Sweeping shine */
+    .start-btn::after {
+        content: '';
+        position: absolute;
+        top: -50%; left: -60%;
+        width: 50%; height: 200%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+        transform: skewX(-20deg);
+        animation: btn-shine 4s ease-in-out infinite;
+    }
+    @keyframes btn-shine {
+        0%,100% { left: -60%; opacity: 0; }
+        50% { left: 160%; opacity: 1; }
+    }
+
+    .start-label {
+        position: relative;
+        z-index: 2;
+        padding-bottom: 10px;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+    }
+
+    /* =====================
+       ACTION BUTTONS
+    ===================== */
+    .actions { display: flex; flex-direction: column; gap: 12px; }
+
+    .btn-modern {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 16px;
+        padding: 16px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    }
+
+    /* Hover shimmer fill */
+    .btn-modern::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,106,0,0.06), rgba(155,0,255,0.06));
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .btn-modern:hover::before { opacity: 1; }
+
+    /* Left glow accent bar */
+    .btn-accent-bar {
+        position: absolute;
+        left: 0; top: 15%; bottom: 15%;
+        width: 3px;
+        background: linear-gradient(180deg, var(--orange), var(--pink));
+        box-shadow: 0 0 10px var(--orange);
+        border-radius: 0 3px 3px 0;
+    }
+
+    .btn-label { 
+        font-weight: 700; 
+        font-size: 12px; 
+        letter-spacing: 1.5px; 
+        text-transform: uppercase; 
+        color: rgba(255,255,255,0.9);
+        text-align: left;
+    }
+    .btn-sublabel { 
+        font-size: 10px; 
+        color: rgba(255,255,255,0.35); 
+        margin-top: 3px; 
+        font-weight: 300; 
+        letter-spacing: 1px;
+        text-align: left;
+    }
+
+    .btn-icon-wrap {
+        width: 42px; height: 42px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.08);
+        display: flex; align-items: center; justify-content: center;
+        transition: transform 0.2s;
+    }
+
+    .btn-icon-wrap i { 
+        font-size: 18px; 
+        background: linear-gradient(135deg, var(--orange), var(--pink));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 6px rgba(255,106,0,0.6));
+    }
+
+    /* Satellite icon variant */
+    .btn-modern:nth-child(2) .btn-accent-bar { background: linear-gradient(180deg, var(--cyan), var(--purple)); box-shadow: 0 0 10px var(--cyan); }
+    .btn-modern:nth-child(2) .btn-icon-wrap i {
+        background: linear-gradient(135deg, var(--cyan), var(--purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 6px rgba(0,255,224,0.6));
+    }
+
+    /* =====================
+       STATUS BAR
+    ===================== */
+    .status-bar {
+        margin-top: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    .status-dot {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 8px var(--cyan);
+        animation: status-blink 2s ease-in-out infinite;
+    }
+    @keyframes status-blink {
+        0%,100% { opacity: 1; transform: scale(1); }
+        50%      { opacity: 0.3; transform: scale(0.7); }
+    }
+    .status-text {
+        font-size: 9px;
+        letter-spacing: 3px;
+        color: rgba(255,255,255,0.2);
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    /* =====================
+       CLICK FX
+    ===================== */
+    .click-active {
+        transform: scale(0.93) !important;
+        transition: transform 0.08s ease-out !important;
+    }
+
+    /* Fire particles */
     .fire-particle {
-    position: fixed;
-    pointer-events: none;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    z-index: 10000;
-    background: radial-gradient(circle, #ff8c00, #ff4500, #ff0000);
-    box-shadow: 0 0 10px #ff4500, 0 0 20px #ff0000;
-    animation: fire-burst 0.7s ease-out forwards;
-}
+        position: fixed;
+        pointer-events: none;
+        border-radius: 50%;
+        z-index: 10000;
+        animation: fire-burst var(--dur, 0.7s) ease-out forwards;
+    }
+    @keyframes fire-burst {
+        0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0); opacity: 0; }
+    }
 
-@keyframes fire-burst {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0); opacity: 0; }
-}
+    /* Ring expand on click */
+    .click-ring {
+        position: fixed;
+        width: 10px; height: 10px;
+        border-radius: 50%;
+        border: 2px solid var(--cyan);
+        pointer-events: none;
+        z-index: 9999;
+        animation: ring-expand 0.5s ease-out forwards;
+    }
+    @keyframes ring-expand {
+        0%   { transform: translate(-50%,-50%) scale(1); opacity: 0.8; }
+        100% { transform: translate(-50%,-50%) scale(12); opacity: 0; }
+    }
 
-    
-        /* --- CUSTOMIZABLE SETTINGS --- */
-        :root {
-            --rest-interval: 300ms; /* Click effect duration */
-            --primary: #ff8c00;
-            --secondary: #ff00ff;
-            --accent: #00f2ff;
-            --bg-dark: #030303;
-            --glass: rgba(255, 255, 255, 0.05);
-            --btn-bg: #0a1118;
-        }
+    /* Sparkles */
+    .sparkle {
+        position: fixed;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        animation: sparkle-rise linear forwards;
+    }
+    @keyframes sparkle-rise {
+        0%   { transform: translateY(0) scale(1); opacity: 0.8; }
+        100% { transform: translateY(-100vh) scale(0.3); opacity: 0; }
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    /* =====================
+       CURSOR TRAIL
+    ===================== */
+    .cursor-trail {
+        position: fixed;
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        animation: trail-fade 0.6s ease-out forwards;
+    }
+    @keyframes trail-fade {
+        0%   { transform: translate(-50%,-50%) scale(1); opacity: 0.7; }
+        100% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+    }
 
-        body {
-            background-color: var(--bg-dark);
-            font-family: 'Outfit', sans-serif;
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-        }
-
-        .bg-canvas {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 70%);
-        }
-
-        /* Fixed Header Size - Pehle se chota */
-        .header {
-            width: 100%;
-            height: 180px; /* Reduced from 250px */
-            background: linear-gradient(135deg, #ff8c00, #ff00ff, #00f2ff);
-            background-size: 300% 300%;
-            animation: flow 8s ease infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
-            margin-bottom: 20px;
-        }
-
-        @keyframes flow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .main-title {
-            font-family: 'Syncopate', sans-serif;
-            font-size: clamp(16px, 5vw, 22px);
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            padding-bottom: 20px;
-        }
-
-        .card {
-            width: 92%;
-            max-width: 400px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 25px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            text-align: center;
-        }
-
-        /* Shared Click Effect Class */
-        .click-active {
-            transform: scale(0.92) !important;
-            transition: transform 0.1s ease-out;
-        }
-
-        /* Access Hub Button */
-        .hub-btn {
-            background: rgba(10, 25, 30, 0.9);
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            border-radius: 12px;
-            padding: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-decoration: none;
-            color: white;
-            margin-bottom: 25px;
-            position: relative;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .hub-btn::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 4px;
-            background: #ff0055;
-            box-shadow: 0 0 10px #ff0055;
-            border-radius: 4px 0 0 4px;
-        }
-
-        /* Start Center Button */
-        .btn-container { position: relative; width: 150px; height: 150px; margin: 0 auto 25px; }
-        .orbit {
-            position: absolute; inset: 0;
-            border: 2px solid transparent;
-            border-top: 2px solid var(--primary);
-            border-bottom: 2px solid var(--accent);
-            border-radius: 50%;
-            animation: spin 3s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .start-btn {
-            position: absolute; inset: 10px;
-            background: url('https://files.catbox.moe/52799g.jpg') center/cover;
-            border-radius: 50%;
-            border: 2px solid #fff;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 14px; color: white;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* Action Buttons */
-        .actions { display: flex; flex-direction: column; gap: 12px; }
-
-        .btn-modern {
-            background: var(--btn-bg);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 18px 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-decoration: none;
-            position: relative;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .btn-modern::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 15%; bottom: 15%;
-            width: 4px;
-            background: var(--accent);
-            box-shadow: 0 0 10px var(--accent);
-            border-radius: 0 4px 4px 0;
-        }
-
-        .btn-info span { 
-            display: block; color: white; font-weight: 800; font-size: 12px; 
-            letter-spacing: 1px; text-transform: uppercase; text-align: left;
-        }
-
-        .btn-modern i { font-size: 22px; color: var(--accent); filter: drop-shadow(0 0 5px var(--accent)); }
-
-        .status {
-            margin-top: 25px;
-            font-size: 9px;
-            letter-spacing: 3px;
-            color: rgba(255,255,255,0.2);
-            font-weight: 700;
-        }
-        
-        /* --- NEW NEON SPARKLES EFFECT --- */
-.sparkle-container {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Taaki buttons click karne mein problem na ho */
-    z-index: 0;
-}
-
-.sparkle {
-    position: absolute;
-    bottom: -10px;
-    width: 4px;
-    height: 4px;
-    background: #00f2ff; /* Blue Neon Color */
-    border-radius: 50%;
-    box-shadow: 0 0 10px #00f2ff, 0 0 20px #00f2ff;
-    animation: rise 4s infinite linear;
-    opacity: 0;
-}
-
-@keyframes rise {
-    0% { transform: translateY(0) scale(1); opacity: 1; }
-    100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
-}
-
-/* --- HEADER COLOR CHANGE ON HOVER --- */
-.header {
-    width: 100%;
-    height: 180px;
-    background: linear-gradient(135deg, #ff8c00, #ff00ff, #00f2ff);
-    background-size: 300% 300%;
-    animation: flow 8s ease infinite;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
-    margin-bottom: 20px;
-    transition: background 0.5s ease; /* Smooth transition ke liye */
-}
-
-/* Jab mouse ya touch header ke paas jaye (Desktop/Mobile dono ke liye) */
-.header:hover {
-    background: linear-gradient(135deg, #ff0000, #990000, #ff4d4d) !important;
-    animation: none; /* Hover par flow stop karke red dikhane ke liye */
-}
-
-
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 2px; }
     </style>
 </head>
 <body>
 
 <audio id="click-sound" preload="auto"></audio>
 
-<div class="sparkle-container" id="sparkle-box"></div>
+<!-- Background -->
+<div class="bg-scene"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="scan-line"></div>
 
-
-<div class="bg-canvas"></div>
-
+<!-- Header -->
 <div class="header">
-    <h1 class="main-title">ANIME FANZ FZ</h1>
+    <div class="header-slash"></div>
+    <div class="logo-wrap">
+        <div class="logo-tag">— Official Portal —</div>
+        <h1 class="main-title" data-text="ANIME FANZ FZ">ANIME FANZ FZ</h1>
+        <div class="logo-sub">✦ Your Ultimate Anime Source ✦</div>
+    </div>
+    <div class="header-bottom-clip"></div>
 </div>
 
+<!-- Main Card -->
 <div class="card">
+
+    <!-- Telegram Hub Button -->
     <a href="https://t.me/+bxLawCRx2pw0MjU1" class="hub-btn tap-btn">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <i class="fab fa-telegram" style="color: var(--accent); font-size: 18px;"></i>
-            <span style="font-weight: 800; letter-spacing: 1.5px; font-size: 13px; text-transform: uppercase;">Access our Telegram Hub</span>
+        <span class="hub-btn-accent"></span>
+        <div class="hub-btn-text">
+            <i class="fab fa-telegram tg-icon"></i>
+            <span>Access Our Telegram Hub</span>
         </div>
-        <i class="fas fa-bolt" style="color: var(--accent);"></i>
+        <div class="hub-arrow"><i class="fas fa-bolt"></i></div>
     </a>
 
+    <!-- START Button -->
     <div class="btn-container">
-        <div class="orbit"></div>
-        <div id="main-btn" class="start-btn tap-btn">START</div>
+        <div class="glow-ring"></div>
+        <div class="orbit-outer"></div>
+        <div class="orbit-inner"></div>
+        <div class="orbit-dot"></div>
+        <div id="main-btn" class="start-btn tap-btn">
+            <span class="start-label">START</span>
+        </div>
     </div>
 
+    <!-- Action Buttons -->
     <div class="actions">
         <a href="http://t.me/Anime_Fanz_Fzbot" class="btn-modern tap-btn">
-            <div class="btn-info">
-                <span>Contact Admin</span>
-                <span>💫😊🌸</span>
+            <span class="btn-accent-bar"></span>
+            <div>
+                <div class="btn-label">Contact Admin</div>
+                <div class="btn-sublabel">Direct support 💫</div>
             </div>
-            <i class="fas fa-user-shield"></i>
+            <div class="btn-icon-wrap"><i class="fas fa-user-shield"></i></div>
         </a>
 
         <a href="https://t.me/+g6PUdKTHp5FhZDJl" class="btn-modern tap-btn">
-            <div class="btn-info">
-                <span>Support Group</span>
+            <span class="btn-accent-bar"></span>
+            <div>
+                <div class="btn-label">Support Group</div>
+                <div class="btn-sublabel">Community hub 🌸</div>
             </div>
-            <i class="fas fa-satellite-dish"></i>
+            <div class="btn-icon-wrap"><i class="fas fa-satellite-dish"></i></div>
         </a>
     </div>
 
-    <p class="status">Powered By @Anime_Fanz_Fz</p>
+    <!-- Status -->
+    <div class="status-bar">
+        <span class="status-dot"></span>
+        <span class="status-text">Powered By @Anime_Fanz_Fz</span>
+        <span class="status-dot"></span>
+    </div>
 </div>
 
 <script>
-/* =========================================
-   --- CUSTOMIZABLE SETTINGS (TOP) ---
-   =========================================
-*/
+/* ========================
+   SETTINGS
+======================== */
 const SETTINGS = {
-    rest_interval: 300,        // Click ke kitni der baad link khulegi (ms)
-    use_base64: true,          // Base64 decoding ON rakhne ke liye true karein
-    particle_count: 12,        // Click par kitne fire sparks nikalenge
-    sparkle_speed: 200,        // Background neon dots ki speed
-    error_msg: 'Link Expired or Invalid!' // Agar link galat ho toh message
+    rest_interval: 300,
+    use_base64: true,
+    particle_count: 14,
+    sparkle_interval: 180,
+    error_msg: 'Link Expired or Invalid!'
 };
 
-// Tumhari Sound List
 const SOUND_LIST = [
-    "https://www.soundjay.com/buttons_c2026/sounds/button-3.mp3",
     "https://files.catbox.moe/6h33lc.mp3",
     "https://files.catbox.moe/wzj0v9.mp3",
     "https://files.catbox.moe/axmlfj.mp3",
@@ -320,97 +722,129 @@ const SOUND_LIST = [
     "https://files.catbox.moe/f7pwz9.mp3"
 ];
 
-/* --- CORE LOGIC (Don't change unless needed) --- */
-
+/* ========================
+   INIT TELEGRAM
+======================== */
 const tg = window.Telegram.WebApp;
 tg.expand();
 tg.ready();
+tg.BackButton.show();
+tg.BackButton.onClick(() => tg.close());
 
-const audioElement = document.getElementById('click-sound');
+const audioEl = document.getElementById('click-sound');
 
-// 1. Sparkle Generator (Neon Background)
-function createSparkle() {
-    const container = document.getElementById('sparkle-box');
-    const sparkle = document.createElement('div');
-    sparkle.classList.add('sparkle');
-    sparkle.style.left = Math.random() * window.innerWidth + 'px';
-    const size = Math.random() * 4 + 2;
-    sparkle.style.width = size + 'px';
-    sparkle.style.height = size + 'px';
-    sparkle.style.animationDuration = (Math.random() * 2 + 3) + 's';
-    container.appendChild(sparkle);
-    setTimeout(() => sparkle.remove(), 4000);
-}
-setInterval(createSparkle, SETTINGS.sparkle_speed);
+/* ========================
+   AMBIENT SPARKLES
+======================== */
+const colors = ['#ff6a00','#ff007a','#00ffe0','#9b00ff','#ffffff'];
+setInterval(() => {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    const size = Math.random() * 3 + 2;
+    s.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${Math.random()*100}vw;
+        bottom:${Math.random()*20}vh;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        box-shadow:0 0 8px currentColor;
+        animation-duration:${Math.random()*3+3}s;
+    `;
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 6000);
+}, SETTINGS.sparkle_interval);
 
-// 2. Button Click & Decoding Logic
-const allButtons = document.querySelectorAll('.tap-btn');
+/* ========================
+   CURSOR TRAIL (Desktop)
+======================== */
+let trailCount = 0;
+document.addEventListener('mousemove', (e) => {
+    if (trailCount++ % 2 !== 0) return; // every other move
+    const t = document.createElement('div');
+    t.className = 'cursor-trail';
+    const c = colors[Math.floor(Math.random()*colors.length)];
+    t.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;background:${c};box-shadow:0 0 6px ${c};`;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 600);
+});
 
-allButtons.forEach(btn => {
+/* ========================
+   FIRE + RING ON CLICK
+======================== */
+window.addEventListener('click', (e) => {
+    // Ring
+    const ring = document.createElement('div');
+    ring.className = 'click-ring';
+    ring.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;`;
+    document.body.appendChild(ring);
+    setTimeout(() => ring.remove(), 500);
+
+    // Fire particles
+    const fireColors = [
+        ['#ffcc00','#ff8800','#ff4400'],
+        ['#ff00aa','#ff007a','#cc0055'],
+        ['#00ffe0','#00aacc','#0077aa'],
+    ];
+    const palette = fireColors[Math.floor(Math.random()*fireColors.length)];
+    for (let i = 0; i < SETTINGS.particle_count; i++) {
+        const p = document.createElement('div');
+        p.className = 'fire-particle';
+        const angle = Math.random() * Math.PI * 2;
+        const vel   = Math.random() * 130 + 30;
+        const size  = Math.random() * 7 + 3;
+        const color = palette[Math.floor(Math.random()*palette.length)];
+        p.style.cssText = `
+            left:${e.clientX}px; top:${e.clientY}px;
+            width:${size}px; height:${size}px;
+            background:${color};
+            box-shadow:0 0 ${size*2}px ${color};
+            --tx:${Math.cos(angle)*vel}px;
+            --ty:${Math.sin(angle)*vel}px;
+            --dur:${Math.random()*0.4+0.4}s;
+        `;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 800);
+    }
+});
+
+/* ========================
+   BUTTON LOGIC
+======================== */
+document.querySelectorAll('.tap-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
         e.preventDefault();
-        const targetUrl = this.getAttribute('href');
-        
-        // Sound Play Logic
-        if (audioElement) {
-            const randomSound = SOUND_LIST[Math.floor(Math.random() * SOUND_LIST.length)];
-            audioElement.src = randomSound; 
-            audioElement.currentTime = 0; 
-            audioElement.play().catch(err => console.log("Audio blocked"));
-        }
+        const url = this.getAttribute('href');
 
+        // Sound
+        audioEl.src = SOUND_LIST[Math.floor(Math.random() * SOUND_LIST.length)];
+        audioEl.currentTime = 0;
+        audioEl.play().catch(() => {});
+
+        // Haptic
         if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+        // Visual click
         this.classList.add('click-active');
 
         setTimeout(() => {
             this.classList.remove('click-active');
-            
-            if (targetUrl) {
-                // Normal links (Telegram Hub, Admin, etc.)
-                window.location.href = targetUrl;
+
+            if (url) {
+                window.location.href = url;
             } else if (this.id === 'main-btn') {
-                // START Button Logic with Base64 Decoding
-                const urlParams = new URLSearchParams(window.location.search);
-                let target = urlParams.get('target');
-                
+                const target = new URLSearchParams(window.location.search).get('target');
                 if (target) {
                     try {
-                        // Agar SETTINGS.use_base64 true hai toh decode karega
-                        let finalLink = SETTINGS.use_base64 ? atob(target) : decodeURIComponent(target);
-                        window.location.href = finalLink;
-                    } catch(err) {
-                        console.error("Decoding error:", err);
+                        window.location.href = SETTINGS.use_base64 ? atob(target) : decodeURIComponent(target);
+                    } catch {
                         tg.showPopup({ message: SETTINGS.error_msg });
                     }
                 } else {
                     tg.showPopup({ message: 'Target URL missing!' });
                 }
             }
-        }, SETTINGS.rest_interval); 
+        }, SETTINGS.rest_interval);
     });
 });
-
-// 3. Fire Particles Effect
-window.addEventListener('click', function(e) {
-    for (let i = 0; i < SETTINGS.particle_count; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'fire-particle';
-        const angle = Math.random() * Math.PI * 2;
-        const velocity = Math.random() * 120 + 30;
-        particle.style.left = e.clientX + 'px';
-        particle.style.top = e.clientY + 'px';
-        particle.style.setProperty('--tx', Math.cos(angle) * velocity + 'px');
-        particle.style.setProperty('--ty', Math.sin(angle) * velocity + 'px');
-        document.body.appendChild(particle);
-        setTimeout(() => particle.remove(), 700);
-    }
-});
-
-tg.BackButton.show();
-tg.BackButton.onClick(() => tg.close());
-
 </script>
-
-
 </body>
 </html>
