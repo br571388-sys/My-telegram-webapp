@@ -43,7 +43,6 @@
         overflow: hidden;
     }
 
-    /* Slow moving gradient aurora */
     .bg-scene::before {
         content: '';
         position: absolute;
@@ -62,7 +61,6 @@
         100% { transform: translate(-2%, 5%) scale(1.03); }
     }
 
-    /* Grid lines overlay */
     .bg-scene::after {
         content: '';
         position: absolute;
@@ -79,7 +77,6 @@
         50%      { opacity: 1; }
     }
 
-    /* Floating glowing orbs */
     .orb {
         position: fixed;
         border-radius: 50%;
@@ -97,7 +94,6 @@
         50%      { transform: translateY(-40px) scale(1.08); }
     }
 
-    /* Scan line */
     .scan-line {
         position: fixed;
         top: -2px; left: 0; right: 0;
@@ -128,7 +124,6 @@
         margin-bottom: 24px;
     }
 
-    /* Header aurora background */
     .header::before {
         content: '';
         position: absolute;
@@ -136,7 +131,6 @@
         background: linear-gradient(160deg, #1a0028 0%, #050018 50%, #001a1a 100%);
     }
 
-    /* Header top glow band */
     .header::after {
         content: '';
         position: absolute;
@@ -148,7 +142,6 @@
     }
     @keyframes stripe-slide { to { background-position: 200% 0; } }
 
-    /* Diagonal slash accent */
     .header-slash {
         position: absolute;
         top: 0; right: 0; bottom: 0;
@@ -193,7 +186,6 @@
         line-height: 1;
     }
 
-    /* Glitch effect on title */
     .main-title::before,
     .main-title::after {
         content: attr(data-text);
@@ -253,7 +245,6 @@
         animation: fade-in-up 0.8s ease both 0.5s;
     }
 
-    /* Corner accents */
     .card::before, .card::after {
         content: '';
         position: absolute;
@@ -265,7 +256,7 @@
     .card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; border-radius: 0 0 8px 0; }
 
     /* =====================
-       HUB BUTTON (Telegram)
+       HUB BUTTON
     ===================== */
     .hub-btn {
         background: linear-gradient(135deg, rgba(0,200,180,0.08), rgba(0,100,150,0.08));
@@ -293,7 +284,6 @@
     }
     .hub-btn:hover::before, .hub-btn:active::before { opacity: 1; }
 
-    /* Animated left border */
     .hub-btn-accent {
         position: absolute;
         left: 0; top: 0; bottom: 0;
@@ -344,7 +334,6 @@
         margin: 0 auto 28px;
     }
 
-    /* Outer spinning ring */
     .orbit-outer {
         position: absolute; inset: -6px;
         border-radius: 50%;
@@ -354,7 +343,6 @@
         animation: orbit-spin 3s linear infinite;
         box-shadow: 0 0 15px rgba(255,0,122,0.3);
     }
-    /* Inner counter-spinning ring */
     .orbit-inner {
         position: absolute; inset: 6px;
         border-radius: 50%;
@@ -365,7 +353,6 @@
     }
     @keyframes orbit-spin { to { transform: rotate(360deg); } }
 
-    /* Rotating dots on outer ring */
     .orbit-dot {
         position: absolute; inset: -12px;
         animation: orbit-spin 4s linear infinite;
@@ -382,7 +369,6 @@
         box-shadow: 0 0 12px var(--orange), 0 0 24px var(--pink);
     }
 
-    /* Pulsing glow ring */
     .glow-ring {
         position: absolute; inset: -14px;
         border-radius: 50%;
@@ -411,7 +397,6 @@
         border: 2px solid rgba(255,255,255,0.15);
     }
 
-    /* Sweeping shine */
     .start-btn::after {
         content: '';
         position: absolute;
@@ -434,6 +419,86 @@
     }
 
     /* =====================
+       ✨ TITLE SECTION (NEW)
+    ===================== */
+    .title-section {
+        margin-bottom: 20px;
+        position: relative;
+        display: none; /* hidden by default, shown via JS */
+        animation: fade-in-up 0.6s ease both;
+    }
+
+    .title-box {
+        background: linear-gradient(135deg, rgba(255,106,0,0.06), rgba(155,0,255,0.06));
+        border: 1px solid rgba(255,106,0,0.2);
+        border-radius: 16px;
+        padding: 14px 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Animated top border */
+    .title-box::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--orange), var(--pink), var(--purple), var(--cyan));
+        background-size: 200% 100%;
+        animation: stripe-slide 3s linear infinite;
+        border-radius: 2px 2px 0 0;
+    }
+
+    /* Left accent bar */
+    .title-box::after {
+        content: '';
+        position: absolute;
+        left: 0; top: 15%; bottom: 15%;
+        width: 3px;
+        background: linear-gradient(180deg, var(--orange), var(--pink));
+        box-shadow: 0 0 10px var(--orange);
+        border-radius: 0 3px 3px 0;
+    }
+
+    .title-label {
+        font-size: 9px;
+        letter-spacing: 3px;
+        color: rgba(255,255,255,0.3);
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .title-value {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: clamp(15px, 4.5vw, 20px);
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        background: linear-gradient(135deg, #fff 30%, var(--cyan) 70%, var(--pink) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        word-break: break-word;
+        line-height: 1.2;
+    }
+
+    /* Shimmer overlay on title text */
+    .title-shimmer {
+        position: absolute;
+        top: 0; left: -60%;
+        width: 40%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+        transform: skewX(-15deg);
+        animation: title-shimmer-move 4s ease-in-out infinite;
+        pointer-events: none;
+    }
+    @keyframes title-shimmer-move {
+        0%,100% { left: -60%; }
+        50% { left: 120%; }
+    }
+
+    /* =====================
        ACTION BUTTONS
     ===================== */
     .actions { display: flex; flex-direction: column; gap: 12px; }
@@ -452,7 +517,6 @@
         transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
     }
 
-    /* Hover shimmer fill */
     .btn-modern::before {
         content: '';
         position: absolute;
@@ -463,7 +527,6 @@
     }
     .btn-modern:hover::before { opacity: 1; }
 
-    /* Left glow accent bar */
     .btn-accent-bar {
         position: absolute;
         left: 0; top: 15%; bottom: 15%;
@@ -507,7 +570,6 @@
         filter: drop-shadow(0 0 6px rgba(255,106,0,0.6));
     }
 
-    /* Satellite icon variant */
     .btn-modern:nth-child(2) .btn-accent-bar { background: linear-gradient(180deg, var(--cyan), var(--purple)); box-shadow: 0 0 10px var(--cyan); }
     .btn-modern:nth-child(2) .btn-icon-wrap i {
         background: linear-gradient(135deg, var(--cyan), var(--purple));
@@ -553,7 +615,6 @@
         transition: transform 0.08s ease-out !important;
     }
 
-    /* Fire particles */
     .fire-particle {
         position: fixed;
         pointer-events: none;
@@ -566,7 +627,6 @@
         100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0); opacity: 0; }
     }
 
-    /* Ring expand on click */
     .click-ring {
         position: fixed;
         width: 10px; height: 10px;
@@ -581,7 +641,6 @@
         100% { transform: translate(-50%,-50%) scale(12); opacity: 0; }
     }
 
-    /* Sparkles */
     .sparkle {
         position: fixed;
         border-radius: 50%;
@@ -594,9 +653,6 @@
         100% { transform: translateY(-100vh) scale(0.3); opacity: 0; }
     }
 
-    /* =====================
-       CURSOR TRAIL
-    ===================== */
     .cursor-trail {
         position: fixed;
         width: 6px; height: 6px;
@@ -610,7 +666,6 @@
         100% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
     }
 
-    /* Scrollbar */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 2px; }
@@ -659,6 +714,15 @@
         <div class="orbit-dot"></div>
         <div id="main-btn" class="start-btn tap-btn">
             <span class="start-label">START</span>
+        </div>
+    </div>
+
+    <!-- ✨ TITLE SECTION (NEW — shown only when ?title= param is in URL) -->
+    <div class="title-section" id="title-section">
+        <div class="title-box">
+            <div class="title-shimmer"></div>
+            <div class="title-label">✦ Now Playing</div>
+            <div class="title-value" id="title-text">—</div>
         </div>
     </div>
 
@@ -725,6 +789,35 @@ tg.BackButton.onClick(() => tg.close());
 const audioEl = document.getElementById('click-sound');
 
 /* ========================
+   ✨ TITLE LOGIC (NEW)
+   Reads ?title= from URL and shows it on screen
+======================== */
+(function initTitle() {
+    const params = new URLSearchParams(window.location.search);
+    const rawTitle = params.get('title');
+
+    if (rawTitle && rawTitle.trim() !== '') {
+        try {
+            // Support both plain text and base64-encoded title
+            let decodedTitle;
+            try {
+                decodedTitle = decodeURIComponent(rawTitle);
+            } catch {
+                decodedTitle = rawTitle;
+            }
+
+            const titleSection = document.getElementById('title-section');
+            const titleText    = document.getElementById('title-text');
+
+            titleText.textContent = decodedTitle;
+            titleSection.style.display = 'block';
+        } catch (err) {
+            console.warn('Title decode error:', err);
+        }
+    }
+})();
+
+/* ========================
    AMBIENT SPARKLES
 ======================== */
 const colors = ['#ff6a00','#ff007a','#00ffe0','#9b00ff','#ffffff'];
@@ -749,7 +842,7 @@ setInterval(() => {
 ======================== */
 let trailCount = 0;
 document.addEventListener('mousemove', (e) => {
-    if (trailCount++ % 2 !== 0) return; // every other move
+    if (trailCount++ % 2 !== 0) return;
     const t = document.createElement('div');
     t.className = 'cursor-trail';
     const c = colors[Math.floor(Math.random()*colors.length)];
@@ -762,14 +855,12 @@ document.addEventListener('mousemove', (e) => {
    FIRE + RING ON CLICK
 ======================== */
 window.addEventListener('click', (e) => {
-    // Ring
     const ring = document.createElement('div');
     ring.className = 'click-ring';
     ring.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;`;
     document.body.appendChild(ring);
     setTimeout(() => ring.remove(), 500);
 
-    // Fire particles
     const fireColors = [
         ['#ffcc00','#ff8800','#ff4400'],
         ['#ff00aa','#ff007a','#cc0055'],
@@ -805,15 +896,12 @@ document.querySelectorAll('.tap-btn').forEach(btn => {
         e.preventDefault();
         const url = this.getAttribute('href');
 
-        // Sound
         audioEl.src = SOUND_LIST[Math.floor(Math.random() * SOUND_LIST.length)];
         audioEl.currentTime = 0;
         audioEl.play().catch(() => {});
 
-        // Haptic
         if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
 
-        // Visual click
         this.classList.add('click-active');
 
         setTimeout(() => {
