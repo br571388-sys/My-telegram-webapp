@@ -137,7 +137,38 @@
 
     /* START BUTTON */
     .btn-container { position: relative; width: 160px; height: 160px; margin: 0 auto 28px; }
-    /* Style 4+5 Combination — Conic Gradient + Comet Trail */
+    /* ── BLACK HOLE CLICK EFFECT — Design B ── */
+
+    /* Rings: explode outward then snap back */
+    @keyframes bh-ring-explode {
+        0%   { transform:scale(1); opacity:1; }
+        40%  { transform:scale(1.65); opacity:0.2; }
+        60%  { transform:scale(1.65); opacity:0; }
+        61%  { transform:scale(0.8); opacity:0; }
+        85%  { transform:scale(0.8); opacity:0.9; }
+        100% { transform:scale(1); opacity:1; }
+    }
+    .bh-firing .orbit-outer,
+    .bh-firing .orbit-inner,
+    .bh-firing .orbit-dot,
+    .bh-firing .orbit-dot2 {
+        animation: bh-ring-explode 0.8s ease forwards !important;
+    }
+
+    /* Image: 3x spin + deep dark fade + bright return */
+    @keyframes bh-img-B {
+        0%   { transform:scale(1) rotate(0deg);     filter:brightness(1) blur(0px); opacity:1; }
+        20%  { transform:scale(0.88) rotate(180deg); filter:brightness(0.85) blur(0px); opacity:1; }
+        45%  { transform:scale(0.6) rotate(540deg);  filter:brightness(0.55) blur(1px) saturate(0.5); opacity:0.8; }
+        68%  { transform:scale(0.18) rotate(900deg); filter:brightness(0.15) blur(3px) saturate(0); opacity:0.3; }
+        78%  { transform:scale(0) rotate(1080deg);   filter:brightness(0) blur(6px); opacity:0; }
+        79%  { transform:scale(0) rotate(0deg);      filter:brightness(0) blur(0px); opacity:0; }
+        90%  { transform:scale(1.1);  opacity:1; filter:brightness(1.5); }
+        100% { transform:scale(1);    opacity:1; filter:brightness(1); }
+    }
+    #main-btn.bh-img-fire {
+        animation: bh-img-B 1.2s cubic-bezier(0.4,0,0.55,1) forwards !important;
+    }
     @keyframes orbit-spin   { to { transform: rotate(360deg);  } }
     @keyframes orbit-spin-r { to { transform: rotate(-360deg); } }
 
@@ -492,20 +523,21 @@ document.querySelectorAll('.tap-btn').forEach(btn => {
         if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
         this.classList.add('click-active');
 
-        // Rings compress inward on click
-        const rings = document.querySelectorAll('.orbit-outer, .orbit-inner, .orbit-dot, .orbit-dot2');
-        rings.forEach(r => {
-            r.style.transition = 'transform 0.15s ease, opacity 0.15s ease';
-            r.style.transform  = 'scale(0.7)';
-            r.style.opacity    = '0.4';
-        });
+        // Black hole effect — rings explode out + image 3x spin deep fade
+        const btnContainer = document.querySelector('.btn-container');
+        const startBtn     = document.getElementById('main-btn');
+        btnContainer.classList.remove('bh-firing');
+        startBtn.classList.remove('bh-img-fire');
+        void btnContainer.offsetWidth;
+        btnContainer.classList.add('bh-firing');
+        startBtn.classList.add('bh-img-fire');
+        setTimeout(() => {
+            btnContainer.classList.remove('bh-firing');
+            startBtn.classList.remove('bh-img-fire');
+        }, 1400);
 
         setTimeout(() => {
             this.classList.remove('click-active');
-            rings.forEach(r => {
-                r.style.transform = 'scale(1)';
-                r.style.opacity   = '1';
-            });
             if (url) {
                 window.location.href = url;
             } else if (this.id === 'main-btn') {
