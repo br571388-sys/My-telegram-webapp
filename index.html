@@ -418,6 +418,47 @@ const SETTINGS = {
     error_msg: 'Link Expired or Invalid!'
 };
 
+// ── MULTI IMAGE LIST ──
+// Apni saari image URLs yahan daalo — har click par naya random pic
+const IMAGE_LIST = [
+    "https://files.catbox.moe/52799g.jpg",   // Image 1
+    "https://h.uguu.se/rgMFcpPL.jpg",   // Image 2 — apni URL daalo
+    "https://d.uguu.se/ePknqxai.jpg",   // Image 3 — apni URL daalo
+    "https://h.uguu.se/epfDuMxw.jpg",   // Image 4 — apni URL daalo
+    "https://t.me/c/3167933247/825",   // Image 5 — apni URL daalo
+    "https://n.uguu.se/apxjBadN.jpg",
+    "https://n.uguu.se/pSTCYiAl.jpg",
+    "https://o.uguu.se/DinJjEqt.jpg",
+"https://d.uguu.se/YXmCyGiz.jpg",
+"https://h.uguu.se/PmhUWkdV.jpg",
+"https://n.uguu.se/pvBSwrrs.jpg",
+"https://d.uguu.se/EGKsuqgj.jpg",
+"https://n.uguu.se/AlEUvKsC.jpg",
+"https://h.uguu.se/MBdUrwvb.jpg",
+"https://n.uguu.se/GDkczBwl.gif",
+"https://d.uguu.se/bGRgCvrx.jpg",
+];
+
+let lastImgIndex = 0;
+
+function getNextImage() {
+    let idx;
+    do {
+        idx = Math.floor(Math.random() * IMAGE_LIST.length);
+    } while (idx === lastImgIndex && IMAGE_LIST.length > 1);
+    lastImgIndex = idx;
+    return IMAGE_LIST[idx];
+}
+
+// Page load par ek random image set karo
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('main-btn');
+    if (btn) {
+        lastImgIndex = Math.floor(Math.random() * IMAGE_LIST.length);
+        btn.style.backgroundImage = `url('${IMAGE_LIST[lastImgIndex]}')`;
+    }
+});
+
 const SOUND_LIST = [
     "https://files.catbox.moe/6h33lc.mp3",
     "https://files.catbox.moe/wzj0v9.mp3",
