@@ -141,61 +141,77 @@
     /* BOTTOM CARD */
     .card-bottom { margin-top: 14px; margin-bottom: 24px; }
 
-    /* HOW TO OPEN BUTTON */
+    /* HOW TO OPEN — SHARED */
     .how-btn {
         display: flex; align-items: center; justify-content: space-between;
         text-decoration: none; color: white;
-        background: linear-gradient(135deg, rgba(0,255,224,0.04) 0%, rgba(155,0,255,0.06) 100%);
-        border: 1px solid rgba(0,255,224,0.2);
-        border-radius: 18px; padding: 14px 16px;
         margin-top: 20px; position: relative; overflow: hidden;
+        padding: 14px 16px;
         transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
     }
     .how-btn:active { transform: scale(0.97); }
-    .how-glow {
-        position: absolute; inset: 0; border-radius: 18px;
-        background: linear-gradient(135deg, rgba(0,255,224,0.06), transparent 60%);
-        pointer-events: none;
-        animation: how-glow-pulse 3s ease-in-out infinite;
-    }
-    @keyframes how-glow-pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
-    /* Top shimmer line */
-    .how-btn::before {
-        content:''; position:absolute; top:0; left:0; right:0; height:1.5px;
-        background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
-        background-size: 200% 100%;
-        animation: stripe-slide 3s linear infinite;
-    }
     .how-btn-left { display:flex; align-items:center; gap:14px; position:relative; z-index:2; }
-    .how-icon-ring {
-        width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
-        background: linear-gradient(135deg, rgba(0,255,224,0.12), rgba(155,0,255,0.12));
-        border: 1.5px solid rgba(0,255,224,0.35);
-        display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 0 14px rgba(0,255,224,0.25);
-        animation: how-icon-spin 6s linear infinite;
-        position: relative;
+    .how-title { font-weight:800; font-size:12px; letter-spacing:1px; text-transform:uppercase; margin-bottom:3px; }
+    .how-sub { font-size:10px; letter-spacing:1px; }
+    .how-icon { width:44px; height:44px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; position:relative; }
+    .how-arrow { display:flex; align-items:center; justify-content:center; width:32px; height:32px; font-size:11px; position:relative; z-index:2; animation:how-arrow-anim 2s ease-in-out infinite; }
+    @keyframes how-arrow-anim { 0%,100%{transform:translateX(0)} 50%{transform:translateX(4px)} }
+    @keyframes slide { to{background-position:200% 0} }
+
+    /* ── STYLE 5: Rainbow Border ── */
+    .how-style5-wrap {
+        margin-top: 20px;
+        padding: 2px; border-radius: 18px;
+        background: linear-gradient(135deg,var(--orange),var(--pink),var(--purple),var(--cyan),var(--orange));
+        background-size: 300% 300%;
+        animation: rainbow-shift 4s linear infinite;
     }
-    .how-icon-ring::before {
-        content:''; position:absolute; inset:-3px; border-radius:50%;
-        border:1.5px solid transparent;
-        border-top-color: var(--cyan); border-right-color: rgba(0,255,224,0.2);
-        animation: orbit-spin 2s linear infinite;
+    @keyframes rainbow-shift { to{background-position:300% 300%} }
+    .how-style5-wrap .how-btn {
+        margin-top: 0;
+        background: #0a0618; border-radius: 17px;
     }
-    @keyframes how-icon-spin { 0%,100%{box-shadow:0 0 14px rgba(0,255,224,0.25)} 50%{box-shadow:0 0 24px rgba(0,255,224,0.5), 0 0 40px rgba(155,0,255,0.2)} }
-    .how-icon-ring i { font-size:16px; color:var(--cyan); filter:drop-shadow(0 0 6px var(--cyan)); }
-    .how-title { font-weight:800; font-size:12px; letter-spacing:1px; text-transform:uppercase; color:white; margin-bottom:3px; }
-    .how-sub { font-size:10px; color:rgba(0,255,224,0.5); letter-spacing:1px; }
-    .how-arrow {
-        width:32px; height:32px; border-radius:50%;
-        background: rgba(0,255,224,0.08);
-        border: 1px solid rgba(0,255,224,0.25);
-        display:flex; align-items:center; justify-content:center;
-        color:var(--cyan); font-size:11px;
-        position:relative; z-index:2;
-        animation: how-arrow-pulse 2s ease-in-out infinite;
+    .how-style5-wrap .how-icon {
+        border-radius: 50%;
+        background: linear-gradient(135deg,var(--orange),var(--pink));
+        box-shadow: 0 0 16px rgba(255,106,0,0.4);
+        color: white;
     }
-    @keyframes how-arrow-pulse { 0%,100%{transform:translateX(0)} 50%{transform:translateX(3px)} }
+    .how-style5-wrap .how-title {
+        background: linear-gradient(90deg,var(--orange),var(--pink),var(--cyan));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text; background-size:200%;
+        animation: slide 3s linear infinite;
+    }
+    .how-style5-wrap .how-sub { color: rgba(255,255,255,0.35); }
+    .how-style5-wrap .how-arrow { color: var(--pink); }
+
+    /* ── STYLE 7: Golden Glow ── */
+    .how-style7 {
+        background: linear-gradient(135deg,rgba(255,200,0,0.04),rgba(255,106,0,0.04));
+        border: 1px solid rgba(255,200,0,0.22);
+        border-radius: 18px;
+        box-shadow: 0 0 20px rgba(255,200,0,0.06);
+    }
+    .how-style7::before {
+        content:''; position:absolute; top:0; left:0; right:0; height:2px;
+        background: linear-gradient(90deg,transparent,#ffd700,var(--orange),transparent);
+        background-size:200% 100%; animation:slide 3s linear infinite;
+    }
+    .how-style7 .how-icon {
+        border-radius: 50%;
+        background: linear-gradient(135deg,rgba(255,200,0,0.15),rgba(255,106,0,0.1));
+        border: 1.5px solid rgba(255,200,0,0.4);
+        color: #ffd700;
+        box-shadow: 0 0 16px rgba(255,200,0,0.25);
+    }
+    .how-style7 .how-title {
+        background: linear-gradient(90deg,#ffd700,var(--orange));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .how-style7 .how-sub { color: rgba(255,200,0,0.45); }
+    .how-style7 .how-arrow { color: #ffd700; }
 
     /* CLICK FX */
     .click-active { transform:scale(0.93) !important; transition:transform 0.08s ease-out !important; }
@@ -263,22 +279,8 @@
         </div>
     </div>
 
-    <!-- HOW TO OPEN BUTTON — alag style -->
-    <a href="https://t.me/Anime_fanz_watching/8" class="how-btn tap-btn">
-        <div class="how-btn-left">
-            <div class="how-icon-ring">
-                <i class="fas fa-play"></i>
-            </div>
-            <div>
-                <div class="how-title">How to open the Anime</div>
-                <div class="how-sub">Tap to learn 🎬</div>
-            </div>
-        </div>
-        <div class="how-arrow">
-            <i class="fas fa-chevron-right"></i>
-        </div>
-        <div class="how-glow"></div>
-    </a>
+    <!-- HOW TO OPEN BUTTON — JS random style lagayega -->
+    <div id="how-btn-container"></div>
 
 </div>
 
@@ -324,22 +326,20 @@ const SETTINGS = {
 // ── MULTI IMAGE LIST ──
 const IMAGE_LIST = [
     "https://files.catbox.moe/52799g.jpg",
-    "https://files.catbox.moe/3ff9cw.jpg",
-    "https://files.catbox.moe/mv6e7h.jpg",
-    "https://files.catbox.moe/h3v4em.jpg",
-    "https://files.catbox.moe/q18hbs.jpg",
-    "https://files.catbox.moe/p37rhk.jpg",
-    "https://files.catbox.moe/1ugkhe.gif",
-    "https://files.catbox.moe/gjl318.jpg",
-    "https://files.catbox.moe/v7ncvf.jpg",
-    "https://files.catbox.moe/8f3wtu.jpg",
-    "https://files.catbox.moe/kvgfq0.jpg",
-    "https://files.catbox.moe/em2rgi.jpg",
-    "https://files.catbox.moe/v4h5ie.jpg",
-    "https://files.catbox.moe/l7m6i0.jpg",
-    "https://files.catbox.moe/938ebw.jpg",
-    "https://files.catbox.moe/lrtuqw.jpg",
-    "https://files.catbox.moe/t5oaxb.jpg",
+    "https://h.uguu.se/rgMFcpPL.jpg",
+    "https://d.uguu.se/ePknqxai.jpg",
+    "https://h.uguu.se/epfDuMxw.jpg",
+    "https://n.uguu.se/apxjBadN.jpg",
+    "https://n.uguu.se/pSTCYiAl.jpg",
+    "https://o.uguu.se/DinJjEqt.jpg",
+    "https://d.uguu.se/YXmCyGiz.jpg",
+    "https://h.uguu.se/PmhUWkdV.jpg",
+    "https://n.uguu.se/pvBSwrrs.jpg",
+    "https://d.uguu.se/EGKsuqgj.jpg",
+    "https://n.uguu.se/AlEUvKsC.jpg",
+    "https://h.uguu.se/MBdUrwvb.jpg",
+    "https://n.uguu.se/GDkczBwl.gif",
+    "https://d.uguu.se/bGRgCvrx.jpg",
 ];
 let lastImgIndex = 0;
 
@@ -358,6 +358,35 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.style.backgroundImage = `url('${IMAGE_LIST[lastImgIndex]}')`;
     }
 });
+
+// ── HOW TO OPEN BUTTON — Random Style 5 or 7 ──
+(function injectHowBtn() {
+    const url = "https://t.me/Anime_fanz_watching/8";
+    const style = Math.random() < 0.5 ? 5 : 7;
+
+    const inner = `
+        <div class="how-btn-left">
+            <div class="how-icon"><i class="fas fa-play"></i></div>
+            <div>
+                <div class="how-title">How to open the Anime</div>
+                <div class="how-sub">Tap to learn 🎬</div>
+            </div>
+        </div>
+        <div class="how-arrow"><i class="fas fa-chevron-right"></i></div>
+    `;
+
+    let html = '';
+    if (style === 5) {
+        html = `
+        <div class="how-style5-wrap">
+            <a href="${url}" class="how-btn tap-btn">${inner}</a>
+        </div>`;
+    } else {
+        html = `<a href="${url}" class="how-btn how-style7 tap-btn">${inner}</a>`;
+    }
+
+    document.getElementById('how-btn-container').innerHTML = html;
+})();
 
 const SOUND_LIST = [
     "https://files.catbox.moe/6h33lc.mp3","https://files.catbox.moe/wzj0v9.mp3",
