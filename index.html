@@ -8,20 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Exo+2:wght@300;400;700;900&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-    /* ════════════════════════════════════════════
-       MAIN VARIABLES
-    ════════════════════════════════════════════ */
-    :root {
-        --orange:#ff6a00; --pink:#ff007a;
-        --cyan:#00ffe0;   --purple:#9b00ff;
-        --bg:#020510;     --glass:rgba(255,255,255,0.04);
-    }
+    :root{ --orange:#ff6a00; --pink:#ff007a; --cyan:#00ffe0; --purple:#9b00ff; --bg:#020510; --glass:rgba(255,255,255,0.04); }
     *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
     body{ background-color:var(--bg); font-family:'Exo 2',sans-serif; color:white; min-height:100vh; display:flex; flex-direction:column; align-items:center; overflow-x:hidden; position:relative; }
 
-    /* ════════════════════════════════════════════
-       BACKGROUND
-    ════════════════════════════════════════════ */
+    /* BG */
     .bg-scene{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
     .bg-scene::before{ content:''; position:absolute; inset:-50%; background:radial-gradient(ellipse 60% 40% at 20% 30%,rgba(255,106,0,0.12) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 80% 70%,rgba(155,0,255,0.12) 0%,transparent 60%),radial-gradient(ellipse 70% 40% at 50% 90%,rgba(0,255,224,0.08) 0%,transparent 60%); animation:aurora-drift 18s ease-in-out infinite alternate; }
     @keyframes aurora-drift{ 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(-4%,3%) scale(1.05)} 66%{transform:translate(4%,-3%) scale(0.97)} 100%{transform:translate(-2%,5%) scale(1.03)} }
@@ -35,9 +26,7 @@
     .scan-line{ position:fixed; top:-2px; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--cyan),transparent); animation:scan 6s linear infinite; z-index:100; opacity:0.4; pointer-events:none; }
     @keyframes scan{ 0%{top:-2px} 100%{top:100vh} }
 
-    /* ════════════════════════════════════════════
-       HEADER
-    ════════════════════════════════════════════ */
+    /* HEADER */
     .header{ width:100%; height:200px; position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center; overflow:hidden; margin-bottom:24px; }
     .header::before{ content:''; position:absolute; inset:0; background:linear-gradient(160deg,#1a0028 0%,#050018 50%,#001a1a 100%); }
     .header::after{ content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--orange),var(--pink),var(--purple),var(--cyan),var(--orange)); background-size:200% 100%; animation:stripe-slide 3s linear infinite; }
@@ -56,53 +45,48 @@
     @keyframes fade-in-up{ from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
     @keyframes fade-in-down{ from{opacity:0;transform:translateY(-15px)} to{opacity:1;transform:translateY(0)} }
 
-    /* KEY ICON — top right corner */
-    .key-icon-wrap{
-        position:absolute; top:16px; right:16px; z-index:10;
-        width:36px; height:36px; border-radius:50%;
-        background:rgba(0,255,224,0.08); border:1px solid rgba(0,255,224,0.2);
-        display:flex; align-items:center; justify-content:center;
-        cursor:pointer; transition:all 0.2s ease;
-        animation:key-pulse 3s ease-in-out infinite;
-    }
+    /* KEY ICON */
+    .key-icon-wrap{ position:absolute; top:16px; right:16px; z-index:10; width:36px; height:36px; border-radius:50%; background:rgba(0,255,224,0.08); border:1px solid rgba(0,255,224,0.2); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s ease; animation:key-pulse 3s ease-in-out infinite; }
     .key-icon-wrap:active{ transform:scale(0.9); }
     @keyframes key-pulse{ 0%,100%{box-shadow:0 0 8px rgba(0,255,224,0.2)} 50%{box-shadow:0 0 18px rgba(0,255,224,0.5)} }
     .key-icon-wrap i{ font-size:14px; color:var(--cyan); }
+    /* Active token = green glow on key */
+    .key-icon-wrap.token-active{ border-color:rgba(0,255,136,0.4); animation:key-active-pulse 2s ease-in-out infinite; }
+    @keyframes key-active-pulse{ 0%,100%{box-shadow:0 0 8px rgba(0,255,136,0.3)} 50%{box-shadow:0 0 20px rgba(0,255,136,0.7)} }
+    .key-icon-wrap.token-active i{ color:#00ff88; }
 
-    /* ════════════════════════════════════════════
-       TOKEN MODAL
-    ════════════════════════════════════════════ */
-    .token-modal{ position:fixed; inset:0; z-index:9000; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.85); backdrop-filter:blur(12px); padding:20px; }
+    /* TOKEN MODAL */
+    .token-modal{ position:fixed; inset:0; z-index:9000; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.88); backdrop-filter:blur(14px); padding:20px; }
     .token-modal.hidden{ display:none; }
-    .token-box{ background:linear-gradient(135deg,rgba(0,255,224,0.04),rgba(155,0,255,0.06)); border:1px solid rgba(0,255,224,0.2); border-radius:24px; padding:30px 24px; width:100%; max-width:340px; text-align:center; position:relative; }
+    .token-box{ background:linear-gradient(135deg,rgba(0,255,224,0.04),rgba(155,0,255,0.06)); border:1px solid rgba(0,255,224,0.2); border-radius:24px; padding:28px 22px; width:100%; max-width:320px; text-align:center; position:relative; }
     .token-box::before{ content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent); border-radius:24px 24px 0 0; }
-    .token-title{ font-family:'Orbitron',sans-serif; font-size:14px; letter-spacing:3px; color:var(--cyan); margin-bottom:6px; }
-    .token-sub{ font-size:10px; color:rgba(255,255,255,0.35); letter-spacing:1px; margin-bottom:20px; }
-    .token-input{ width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(0,255,224,0.2); border-radius:12px; padding:12px 14px; color:white; font-size:12px; font-family:'Exo 2',sans-serif; letter-spacing:1px; outline:none; margin-bottom:12px; }
+    .token-title{ font-family:'Orbitron',sans-serif; font-size:13px; letter-spacing:3px; color:var(--cyan); margin-bottom:5px; }
+    .token-sub{ font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:1px; margin-bottom:18px; }
+    .token-input{ width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(0,255,224,0.2); border-radius:12px; padding:11px 13px; color:white; font-size:12px; font-family:'Exo 2',sans-serif; letter-spacing:1px; outline:none; margin-bottom:11px; }
     .token-input:focus{ border-color:rgba(0,255,224,0.5); }
-    .token-submit{ width:100%; padding:12px; background:linear-gradient(135deg,var(--cyan),var(--purple)); border:none; border-radius:12px; color:#000; font-weight:800; font-size:11px; letter-spacing:2px; text-transform:uppercase; font-family:'Exo 2',sans-serif; cursor:pointer; margin-bottom:10px; transition:transform 0.15s ease; }
+    .token-submit{ width:100%; padding:11px; background:linear-gradient(135deg,var(--cyan),var(--purple)); border:none; border-radius:12px; color:#000; font-weight:800; font-size:11px; letter-spacing:2px; text-transform:uppercase; font-family:'Exo 2',sans-serif; cursor:pointer; margin-bottom:9px; transition:transform 0.15s ease; }
     .token-submit:active{ transform:scale(0.97); }
-    .token-msg{ font-size:11px; letter-spacing:1px; min-height:18px; margin-bottom:12px; }
+    .token-msg{ font-size:11px; letter-spacing:1px; min-height:18px; margin-bottom:11px; }
     .token-msg.success{ color:#00ff88; }
     .token-msg.error{ color:var(--pink); }
-    .token-close{ background:transparent; border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:rgba(255,255,255,0.3); font-size:10px; letter-spacing:2px; padding:6px 16px; cursor:pointer; font-family:'Exo 2',sans-serif; }
+    .token-close{ background:transparent; border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:rgba(255,255,255,0.3); font-size:10px; letter-spacing:2px; padding:6px 14px; cursor:pointer; font-family:'Exo 2',sans-serif; }
+    /* Token active status panel */
+    .token-status-view{ display:none; text-align:center; }
+    .token-status-view.visible{ display:block; }
+    .token-active-badge{ display:inline-flex; align-items:center; gap:7px; background:rgba(0,255,136,0.07); border:1px solid rgba(0,255,136,0.25); border-radius:20px; padding:6px 16px; margin-bottom:14px; }
+    .token-active-dot{ width:7px; height:7px; border-radius:50%; background:#00ff88; box-shadow:0 0 8px #00ff88; animation:status-blink 2s ease-in-out infinite; }
+    @keyframes status-blink{ 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
+    .token-active-label{ font-size:10px; letter-spacing:2px; color:#00ff88; font-family:'Orbitron',sans-serif; }
+    .token-time-big{ font-family:'Orbitron',sans-serif; font-size:26px; font-weight:700; letter-spacing:2px; color:var(--cyan); margin-bottom:3px; }
+    .token-time-sub{ font-size:9px; color:rgba(255,255,255,0.22); letter-spacing:3px; text-transform:uppercase; margin-bottom:18px; }
+    .token-revoke-btn{ background:rgba(255,0,122,0.08); border:1px solid rgba(255,0,122,0.2); border-radius:8px; color:rgba(255,0,122,0.6); font-size:9px; letter-spacing:2px; padding:6px 14px; cursor:pointer; font-family:'Exo 2',sans-serif; margin-right:6px; }
+    .token-input-panel{ display:block; }
 
-    /* ════════════════════════════════════════════
-       AD OVERLAY
-    ════════════════════════════════════════════ */
+    /* AD OVERLAY */
     .ad-overlay{ position:fixed; inset:0; z-index:8000; background:rgba(2,5,16,0.97); backdrop-filter:blur(16px); display:flex; flex-direction:column; align-items:center; padding:16px; overflow-y:auto; }
     .ad-overlay.hidden{ display:none; }
-
-    /* Note at top */
-    .ad-note{
-        font-family:'Orbitron',sans-serif; font-size:9px; letter-spacing:1.5px;
-        color:rgba(255,255,255,0.35); text-align:center; line-height:1.7;
-        padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.05);
-        margin-bottom:14px; width:100%; max-width:400px;
-    }
-    .ad-note span{ color:rgba(0,255,224,0.6); }
-
-    /* Counter */
+    .ad-note{ font-family:'Orbitron',sans-serif; font-size:9px; letter-spacing:1.4px; color:rgba(255,255,255,0.3); text-align:center; line-height:1.8; padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.05); margin-bottom:14px; width:100%; max-width:400px; }
+    .ad-note span{ color:rgba(0,255,224,0.55); }
     .ad-counter-wrap{ display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:14px; }
     .ad-counter{ font-family:'Orbitron',sans-serif; font-size:11px; letter-spacing:3px; color:var(--cyan); }
     .ad-dots{ display:flex; gap:5px; }
@@ -110,13 +94,19 @@
     .ad-dot.active{ background:var(--cyan); box-shadow:0 0 8px var(--cyan); }
     .ad-dot.done{ background:rgba(0,255,224,0.4); }
 
-    /* Ad content area */
-    .ad-content-wrap{ width:100%; max-width:400px; border-radius:20px; overflow:hidden; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); margin-bottom:16px; min-height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-    .ad-video{ width:100%; max-height:220px; border-radius:20px; display:block; object-fit:cover; }
+    /* Ad content */
+    .ad-content-wrap{ width:100%; max-width:400px; border-radius:20px; overflow:hidden; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); margin-bottom:16px; position:relative; }
+    /* Video — auto aspect ratio, no fixed height */
+    .ad-video{ width:100%; height:auto; display:block; border-radius:20px; }
+    /* Mute toggle over video */
+    .ad-mute-btn{ position:absolute; top:10px; right:10px; width:34px; height:34px; border-radius:50%; background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:5; }
+    .ad-mute-btn i{ font-size:13px; color:white; }
+    /* Non-video link message */
     .ad-link-msg{ text-align:center; padding:28px 20px; }
-    .ad-link-icon{ font-size:32px; margin-bottom:12px; opacity:0.6; }
-    .ad-link-title{ font-family:'Orbitron',sans-serif; font-size:10px; letter-spacing:2px; color:rgba(255,255,255,0.5); margin-bottom:8px; }
-    .ad-link-text{ font-size:10px; color:rgba(255,255,255,0.25); letter-spacing:1px; line-height:1.8; }
+    .ad-link-icon{ font-size:28px; margin-bottom:10px; opacity:0.55; }
+    .ad-link-title{ font-family:'Orbitron',sans-serif; font-size:10px; letter-spacing:2px; color:rgba(255,255,255,0.45); margin-bottom:10px; }
+    .ad-link-text{ font-size:10px; color:rgba(255,255,255,0.22); letter-spacing:1px; line-height:2; }
+    .ad-link-hyperlink{ color:var(--cyan); text-decoration:underline; text-underline-offset:3px; cursor:pointer; font-weight:700; letter-spacing:1px; }
 
     /* Timer */
     .ad-timer-wrap{ display:flex; flex-direction:column; align-items:center; gap:4px; margin-bottom:14px; }
@@ -128,29 +118,31 @@
     .ad-timer-num{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Orbitron',sans-serif; font-size:16px; font-weight:700; color:var(--cyan); }
     .ad-timer-label{ font-size:9px; letter-spacing:2px; color:rgba(255,255,255,0.2); text-transform:uppercase; }
 
-    /* Continue button */
+    /* Continue */
     .ad-continue{ background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:12px; color:rgba(255,255,255,0.7); font-size:11px; letter-spacing:2px; text-transform:uppercase; font-family:'Exo 2',sans-serif; padding:11px 28px; cursor:pointer; transition:all 0.2s ease; width:100%; max-width:400px; }
     .ad-continue:active{ transform:scale(0.97); }
     .ad-continue.hidden{ display:none; pointer-events:none; }
     .ad-continue:not(.hidden){ animation:fade-in-up 0.4s ease both; }
 
-    /* Finish — Open button + confetti */
+    /* Finish — confetti + Open button */
     .ad-finish{ width:100%; max-width:400px; position:relative; }
     .ad-finish.hidden{ display:none; }
     .ad-finish:not(.hidden){ animation:fade-in-up 0.5s ease both; }
-
-    /* Confetti */
     .confetti-side{ position:absolute; top:0; pointer-events:none; }
     .confetti-left{ left:-10px; }
     .confetti-right{ right:-10px; }
     .confetti-piece{ position:absolute; width:8px; height:8px; border-radius:2px; animation:confetti-fall 1.2s ease-out forwards; }
-    @keyframes confetti-fall{
-        0%  { transform:translate(0,0) rotate(0deg) scale(1); opacity:1; }
-        100%{ transform:translate(var(--cx),var(--cy)) rotate(720deg) scale(0.3); opacity:0; }
-    }
-
+    @keyframes confetti-fall{ 0%{transform:translate(0,0) rotate(0deg) scale(1);opacity:1} 100%{transform:translate(var(--cx),var(--cy)) rotate(720deg) scale(0.3);opacity:0} }
     /* Open button — Contact Admin style */
-    .ad-open-btn{ display:flex; justify-content:space-between; align-items:center; text-decoration:none; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px 20px; position:relative; overflow:hidden; color:white; transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1); margin-top:8px; }
+    .ad-open-btn{
+        display:flex; justify-content:space-between; align-items:center;
+        text-decoration:none; background:rgba(255,255,255,0.03);
+        border:1px solid rgba(255,255,255,0.07); border-radius:16px;
+        padding:16px 20px; position:relative; overflow:hidden; color:white;
+        transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1); margin-top:8px;
+        /* Prevent long-press URL preview */
+        -webkit-touch-callout:none; user-select:none; -webkit-user-select:none;
+    }
     .ad-open-btn .btn-accent-bar{ position:absolute; left:0; top:15%; bottom:15%; width:3px; background:linear-gradient(180deg,var(--cyan),var(--purple)); box-shadow:0 0 10px var(--cyan); border-radius:0 3px 3px 0; }
     .ad-open-btn .btn-label{ font-weight:700; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.9); text-align:left; }
     .ad-open-btn .btn-sublabel{ font-size:10px; color:rgba(255,255,255,0.35); margin-top:3px; font-weight:300; letter-spacing:1px; text-align:left; }
@@ -159,9 +151,7 @@
     .ad-open-emoji{ text-align:center; font-size:22px; letter-spacing:6px; margin-bottom:4px; animation:emoji-bounce 0.6s ease-out; }
     @keyframes emoji-bounce{ 0%{transform:scale(0)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
 
-    /* ════════════════════════════════════════════
-       CARD
-    ════════════════════════════════════════════ */
+    /* CARD */
     .card{ width:92%; max-width:400px; background:var(--glass); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-radius:28px; padding:28px 20px; border:1px solid rgba(255,255,255,0.06); text-align:center; position:relative; animation:fade-in-up 0.8s ease both 0.5s; }
     .card::before,.card::after{ content:''; position:absolute; width:24px; height:24px; border-color:var(--cyan); border-style:solid; }
     .card::before{ top:-1px; left:-1px; border-width:2px 0 0 2px; border-radius:8px 0 0 0; }
@@ -188,13 +178,10 @@
 
     /* START BUTTON */
     .btn-container{ position:relative; width:160px; height:160px; margin:0 auto 28px; }
-
-    /* BLACK HOLE EFFECT */
     @keyframes bh-ring-explode{ 0%{transform:scale(1);opacity:1} 40%{transform:scale(1.65);opacity:0.2} 60%{transform:scale(1.65);opacity:0} 61%{transform:scale(0.8);opacity:0} 85%{transform:scale(0.8);opacity:0.9} 100%{transform:scale(1);opacity:1} }
     .bh-firing .orbit-outer,.bh-firing .orbit-inner,.bh-firing .orbit-dot,.bh-firing .orbit-dot2{ animation:bh-ring-explode 0.8s ease forwards !important; }
     @keyframes bh-img-B{ 0%{transform:scale(1) rotate(0deg);filter:brightness(1) blur(0px);opacity:1} 20%{transform:scale(0.88) rotate(180deg);filter:brightness(0.85) blur(0px);opacity:1} 45%{transform:scale(0.6) rotate(540deg);filter:brightness(0.55) blur(1px) saturate(0.5);opacity:0.8} 68%{transform:scale(0.18) rotate(900deg);filter:brightness(0.15) blur(3px) saturate(0);opacity:0.3} 78%{transform:scale(0) rotate(1080deg);filter:brightness(0) blur(6px);opacity:0} 79%{transform:scale(0) rotate(0deg);filter:brightness(0) blur(0px);opacity:0} 90%{transform:scale(1.1);opacity:1;filter:brightness(1.5)} 100%{transform:scale(1);opacity:1;filter:brightness(1)} }
     #main-btn.bh-img-fire{ animation:bh-img-B 1.2s cubic-bezier(0.4,0,0.55,1) forwards !important; }
-
     @keyframes orbit-spin{ to{transform:rotate(360deg)} }
     @keyframes orbit-spin-r{ to{transform:rotate(-360deg)} }
     .orbit-outer{ position:absolute; inset:-4px; border-radius:50%; border:4px solid transparent; background:linear-gradient(var(--bg),var(--bg)) padding-box,conic-gradient(var(--cyan) 0deg,transparent 110deg,var(--pink) 180deg,transparent 290deg,var(--cyan) 360deg) border-box; animation:orbit-spin 3s linear infinite; box-shadow:0 0 20px rgba(0,255,224,0.35); }
@@ -228,7 +215,6 @@
     /* STATUS */
     .status-bar{ margin-top:28px; display:flex; align-items:center; justify-content:center; gap:8px; }
     .status-dot{ width:6px; height:6px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); animation:status-blink 2s ease-in-out infinite; }
-    @keyframes status-blink{ 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
     .status-text{ font-size:9px; letter-spacing:3px; color:rgba(255,255,255,0.2); font-weight:600; text-transform:uppercase; }
     .card-bottom{ margin-top:14px; margin-bottom:24px; }
 
@@ -278,71 +264,74 @@
 <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
 <div class="scan-line"></div>
 
-<!-- ══════════════════════════════════════
-     TOKEN MODAL
-══════════════════════════════════════ -->
+<!-- TOKEN MODAL -->
 <div id="token-modal" class="token-modal hidden">
     <div class="token-box">
         <div class="token-title">🔑 ACCESS CODE</div>
         <div class="token-sub">Enter your ad-free access token</div>
-        <input type="text" id="token-input" class="token-input" placeholder="Paste the code here...">
-        <button id="token-submit" class="token-submit">✦ Verify Code</button>
-        <div id="token-msg" class="token-msg"></div>
+
+        <!-- Input panel (shown when no active token) -->
+        <div id="token-input-panel">
+            <input type="text" id="token-input" class="token-input" placeholder="Paste the code here...">
+            <button id="token-submit" class="token-submit">✦ Verify Code</button>
+            <div id="token-msg" class="token-msg"></div>
+        </div>
+
+        <!-- Status panel (shown when active token exists) -->
+        <div id="token-status-view" class="token-status-view">
+            <div class="token-active-badge">
+                <div class="token-active-dot"></div>
+                <div class="token-active-label">AD-FREE ACTIVE</div>
+            </div>
+            <div class="token-time-big" id="token-time-big">--:--:--</div>
+            <div class="token-time-sub">Time Remaining</div>
+            <button id="token-revoke-btn" class="token-revoke-btn">✕ Revoke Token</button>
+        </div>
+
         <button id="token-close" class="token-close">✕ Close</button>
     </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     AD OVERLAY
-══════════════════════════════════════ -->
+<!-- AD OVERLAY -->
 <div id="ad-overlay" class="ad-overlay hidden">
     <div class="ad-note">
         <span>🙏 Please cooperate with us</span><br>
         These ads help us bring you anime regularly &amp; keep the platform free.<br>
         <span>Your support keeps us going — thank you! ✨</span>
     </div>
-
     <div class="ad-counter-wrap">
         <div class="ad-counter" id="ad-counter">1 OF 1</div>
         <div class="ad-dots" id="ad-dots"></div>
     </div>
-
-    <div class="ad-content-wrap" id="ad-content-wrap">
-        <!-- video or link message injected here -->
-    </div>
-
-    <div class="ad-timer-wrap" id="ad-timer-wrap">
+    <div class="ad-content-wrap" id="ad-content-wrap"></div>
+    <div class="ad-timer-wrap">
         <div class="ad-timer-ring">
             <svg width="54" height="54" viewBox="0 0 54 54">
                 <circle class="track" cx="27" cy="27" r="23"/>
-                <circle class="progress" id="timer-circle" cx="27" cy="27" r="23"
-                    stroke-dasharray="144.51" stroke-dashoffset="0"/>
+                <circle class="progress" id="timer-circle" cx="27" cy="27" r="23" stroke-dasharray="144.51" stroke-dashoffset="0"/>
             </svg>
             <div class="ad-timer-num" id="ad-timer-num">10</div>
         </div>
         <div class="ad-timer-label">seconds remaining</div>
     </div>
-
     <button class="ad-continue hidden" id="ad-continue">Continue →</button>
-
     <div class="ad-finish hidden" id="ad-finish">
-        <div class="ad-open-emoji" id="ad-open-emoji">🎉 &nbsp; 🎊 &nbsp; 🎉</div>
+        <div class="ad-open-emoji">🎉 &nbsp; 🎊 &nbsp; 🎉</div>
         <div class="confetti-side confetti-left"  id="confetti-left"></div>
         <div class="confetti-side confetti-right" id="confetti-right"></div>
-        <a id="ad-open-btn" class="ad-open-btn" href="#">
+        <!-- Long press URL prevention: oncontextmenu + user-select in CSS -->
+        <div id="ad-open-btn" class="ad-open-btn" oncontextmenu="return false">
             <span class="btn-accent-bar"></span>
             <div>
                 <div class="btn-label">Open Anime 🎌</div>
                 <div class="btn-sublabel">All ads done — enjoy! ✨</div>
             </div>
             <div class="btn-icon-wrap"><i class="fas fa-play"></i></div>
-        </a>
+        </div>
     </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     HEADER
-══════════════════════════════════════ -->
+<!-- HEADER -->
 <div class="header">
     <div class="header-slash"></div>
     <div class="logo-wrap">
@@ -350,16 +339,11 @@
         <h1 class="main-title" data-text="ANIME FANZ FZ">ANIME FANZ FZ</h1>
         <div class="logo-sub">✦ Your Ultimate Anime Source ✦</div>
     </div>
-    <!-- Key icon — top right -->
-    <div class="key-icon-wrap" id="key-icon">
-        <i class="fas fa-key"></i>
-    </div>
+    <div class="key-icon-wrap" id="key-icon"><i class="fas fa-key"></i></div>
     <div class="header-bottom-clip"></div>
 </div>
 
-<!-- ══════════════════════════════════════
-     MAIN CARD
-══════════════════════════════════════ -->
+<!-- MAIN CARD -->
 <div class="card">
     <a href="https://t.me/+bxLawCRx2pw0MjU1" class="hub-btn tap-btn">
         <span class="hub-btn-accent"></span>
@@ -369,24 +353,19 @@
         </div>
         <div class="hub-arrow"><i class="fas fa-bolt"></i></div>
     </a>
-
     <div class="title-section" id="title-section">
         <div class="title-label">Title</div>
         <div class="title-divider"><div class="title-divider-icon">✦</div></div>
         <div class="title-value" id="title-text">—</div>
     </div>
-
     <div class="btn-container">
         <div class="glow-ring"></div>
         <div class="orbit-outer"></div>
         <div class="orbit-inner"></div>
         <div class="orbit-dot"></div>
         <div class="orbit-dot2"></div>
-        <div id="main-btn" class="start-btn">
-            <span class="start-label">START</span>
-        </div>
+        <div id="main-btn" class="start-btn"><span class="start-label">START</span></div>
     </div>
-
     <div id="how-btn-container"></div>
 </div>
 
@@ -395,18 +374,12 @@
     <div class="actions">
         <a href="http://t.me/Anime_Fanz_Fzbot" class="btn-modern tap-btn">
             <span class="btn-accent-bar"></span>
-            <div>
-                <div class="btn-label">Contact Admin</div>
-                <div class="btn-sublabel">Direct support 💫</div>
-            </div>
+            <div><div class="btn-label">Contact Admin</div><div class="btn-sublabel">Direct support 💫</div></div>
             <div class="btn-icon-wrap"><i class="fas fa-user-shield"></i></div>
         </a>
         <a href="https://t.me/+g6PUdKTHp5FhZDJl" class="btn-modern tap-btn">
             <span class="btn-accent-bar"></span>
-            <div>
-                <div class="btn-label">Support Group</div>
-                <div class="btn-sublabel">Community hub 🌸</div>
-            </div>
+            <div><div class="btn-label">Support Group</div><div class="btn-sublabel">Community hub 🌸</div></div>
             <div class="btn-icon-wrap"><i class="fas fa-satellite-dish"></i></div>
         </a>
     </div>
@@ -422,62 +395,57 @@
    ║                  ★ EDIT GUIDE — LINE NUMBERS ★                  ║
    ╠═══════════════════════════════════════════════════════════════════╣
    ║                                                                   ║
-   ║  ⏱️  TIMER (kitne seconds):                                       ║
-   ║      Line 439  →  const AD_TIMER_SECONDS = 10                    ║
-   ║                   Yahan number badlo — 5, 10, 15, 20 etc.        ║
-   ║                   ⚠️  Timer 2 jagah use hota hai:                 ║
-   ║                       Line 650 — timer reset hota hai            ║
-   ║                       Line 676 — countdown chalta hai            ║
-   ║                   (woh dono automatically update ho jaate hain)  ║
+   ║  ⏱️  AD TIMER (kitne seconds):                                    ║
+   ║      Line ~340  →  const AD_TIMER_SECONDS = 10                   ║
+   ║                   Number badlo: 5, 10, 15, 20 etc.               ║
    ║                                                                   ║
-   ║  📺  DEFAULT ADS (jab bot mein Default choose ho):               ║
-   ║      Line 443  →  const DEFAULT_ADS = [...]                      ║
+   ║  📺  DEFAULT ADS (bot mein Default choose hone par):             ║
+   ║      Line ~345  →  const DEFAULT_ADS = [...]                     ║
    ║                   Apne ad links yahan daalo                      ║
    ║                                                                   ║
-   ║  🔑  AD-FREE TOKENS (one-time access codes):                     ║
-   ║      Line 453  →  const AD_FREE_TOKENS = [...]                   ║
-   ║                   Naye codes add karo, purane hatao              ║
+   ║  🔑  AD-FREE TOKENS (har token ke saath time limit hours mein):  ║
+   ║      Line ~355  →  const AD_FREE_TOKENS = [...]                  ║
+   ║                   Format: { code:"TOKEN", hours:24 }             ║
+   ║                   hours: 24 = 1 din, 168 = 1 hafta               ║
+   ║                   0 = kabhi expire nahi (permanent)              ║
    ║                                                                   ║
-   ║  🖼️  START BUTTON IMAGES (rotating images):                      ║
-   ║      Line 463  →  const IMAGE_LIST = [...]                       ║
-   ║                   Apni image URLs yahan daalo                    ║
+   ║  🖼️  START BUTTON IMAGES:                                         ║
+   ║      Line ~370  →  const IMAGE_LIST = [...]                      ║
    ║                                                                   ║
    ║  🔊  CLICK SOUNDS:                                                ║
-   ║      Line 482  →  const SOUND_LIST = [...]                       ║
+   ║      Line ~390  →  const SOUND_LIST = [...]                      ║
    ║                                                                   ║
    ╚═══════════════════════════════════════════════════════════════════╝ */
 
-/* ════════════════════════════════════════════
-   ⚙️ CONFIG — YEH SECTION EDIT KAR SAKTE HO
-════════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   ⚙️ CONFIG — EDIT KARO YAHAN
+════════════════════════════════════════ */
 
-// ⏱️ AD TIMER — Seconds badlne ke liye yahan change karo
-// ⚠️ Sirf number change karo (e.g. 5, 10, 15, 20)
-const AD_TIMER_SECONDS = 5 // ← EDIT: timer kitne seconds ka hoga
+// ⏱️ AD TIMER — Har ad page ka timer (seconds mein)
+// ← EDIT: sirf yeh number badlo
+const AD_TIMER_SECONDS = 10;
 
-// 📺 DEFAULT ADS — Jab bot mein "Default" choose ho tab yeh ads chalenge
-// ⚠️ Links add/remove karo — jitne links utne pages
+// 📺 DEFAULT ADS — Jab bot mein "Default" choose ho
+// ← EDIT: apne ad links daalo, jitne chahiye utne
 const DEFAULT_ADS = [
-    "https://n.uguu.se/AlPGeyAf.mp4",   // ← EDIT: 1st default ad link
-    "https://uguu.se/",   // ← EDIT: 2nd default ad link
-    "https://h.uguu.se/TOevHXqn.mp4",   // ← EDIT: 3rd default ad link
-    "https://www.minecraft.net/en-us/download",
-    // aur links chahiye? copy karke paste karo upar wali line
+    "https://n.uguu.se/AlPGeyAf.mp4",   // ← 1st default ad
+    "https://example.com/ad2",   // ← 2nd default ad
+    "https://h.uguu.se/TOevHXqn.mp4",   // ← 3rd default ad
 ];
 
-// 🔑 AD-FREE TOKENS — Yeh codes enter karne par ads skip ho jayenge
-// ⚠️ Har token sirf ek baar use ho sakta hai (one-time only)
-// ⚠️ Naye tokens add karne ke liye neeche copy karke paste karo
+// 🔑 AD-FREE TOKENS — Code + kitne ghante valid rahega
+// ← EDIT: code badlo, hours = expiry time
+// hours: 24 = 1 din | 48 = 2 din | 168 = 1 week | 720 = 1 month | 0 = permanent
 const AD_FREE_TOKENS = [
-    "0987poiu@",   // ← EDIT: token 1
-    "ANIME-FREE-002",   // ← EDIT: token 2
-    "ANIME-FREE-003",   // ← EDIT: token 3
-    "FANZFZ-VIP-001",   // ← EDIT: token 4
-    "FANZFZ-VIP-002",   // ← EDIT: token 5
-    // aur tokens chahiye? upar wali line copy karke paste karo
+    { code: "{=}098", hours: 23  },   // ← 1 din
+    { code: "ANIME-FREE-002", hours: 48  },   // ← 2 din
+    { code: "ANIME-FREE-003", hours: 168 },   // ← 1 hafta
+    { code: "FANZFZ-VIP-001", hours: 720 },   // ← 1 mahina
+    { code: "FANZFZ-VIP-002", hours: 0   },   // ← permanent (0 = kabhi expire nahi)
+    // ← Naya token add karna ho: { code: "TOKEN", hours: 24 }
 ];
 
-// 🖼️ START BUTTON IMAGES — Yeh images cycle hongi har click par
+// 🖼️ START BUTTON IMAGES
 const IMAGE_LIST = [
     "https://files.catbox.moe/52799g.jpg",
     "https://h.uguu.se/rgMFcpPL.jpg",
@@ -507,9 +475,6 @@ const SOUND_LIST = [
     "https://files.catbox.moe/f7pwz9.mp3",
 ];
 
-/* ════════════════════════════════════════════
-   GENERAL SETTINGS (advanced)
-════════════════════════════════════════════ */
 const SETTINGS = {
     rest_interval: 300,
     use_base64: true,
@@ -518,92 +483,201 @@ const SETTINGS = {
     sparkle_interval: 180,
 };
 
-/* ════════════════════════════════════════════
-   VIDEO URL DETECTION
-   Agar ad link video file hai to video player chalega
-   Warna "press continue" message dikhega
-════════════════════════════════════════════ */
-function isVideoUrl(url) {
-    const videoExts = ['.mp4','.webm','.ogg','.mov','.m4v'];
-    const u = url.toLowerCase();
-    return videoExts.some(ext => u.includes(ext));
+/* ════════════════════════════════════════
+   🔑 TOKEN SYSTEM — Permanent per user
+   localStorage mein expiry ke saath save
+════════════════════════════════════════ */
+const TOKEN_STORE_KEY = 'afz_token_v2'; // localStorage key
+
+// Save token with expiry timestamp
+function saveActiveToken(code, hours) {
+    const activatedAt = Date.now();
+    const expiresAt   = hours === 0 ? 0 : activatedAt + (hours * 60 * 60 * 1000);
+    // 0 = permanent (kabhi expire nahi)
+    localStorage.setItem(TOKEN_STORE_KEY, JSON.stringify({ code: code.toUpperCase(), activatedAt, expiresAt }));
 }
 
-/* ════════════════════════════════════════════
-   TOKEN SYSTEM
-════════════════════════════════════════════ */
-const USED_TOKENS_KEY = 'afz_used_tokens';
-
-function getUsedTokens() {
-    try { return JSON.parse(localStorage.getItem(USED_TOKENS_KEY) || '[]'); }
-    catch { return []; }
-}
-function markTokenUsed(token) {
-    const used = getUsedTokens();
-    used.push(token.toUpperCase());
-    localStorage.setItem(USED_TOKENS_KEY, JSON.stringify(used));
-}
-function isTokenUsed(token) {
-    return getUsedTokens().includes(token.toUpperCase());
-}
-function isTokenValid(token) {
-    return AD_FREE_TOKENS.map(t => t.toUpperCase()).includes(token.toUpperCase());
-}
-function isSessionAdFree() {
-    return sessionStorage.getItem('afz_adfree') === '1';
-}
-function setSessionAdFree() {
-    sessionStorage.setItem('afz_adfree', '1');
+// Get stored token data (or null)
+function getStoredToken() {
+    try { return JSON.parse(localStorage.getItem(TOKEN_STORE_KEY)); }
+    catch { return null; }
 }
 
-// Token modal logic
+// Check if current user has active valid token
+function isAdFreeUser() {
+    const data = getStoredToken();
+    if (!data) return false;
+    if (data.expiresAt === 0) return true;   // permanent
+    return Date.now() < data.expiresAt;       // not expired
+}
+
+// Revoke token (user ya time expire)
+function revokeToken() {
+    localStorage.removeItem(TOKEN_STORE_KEY);
+}
+
+// Check if token code has been used by this device
+function isTokenUsedByThis(code) {
+    const data = getStoredToken();
+    return data && data.code === code.toUpperCase();
+}
+
+// Validate token code against config list
+function findToken(code) {
+    return AD_FREE_TOKENS.find(t => t.code.toUpperCase() === code.toUpperCase());
+}
+
+// Format remaining time as "2d 3h 45m" or "Permanent"
+function formatTimeLeft(expiresAt) {
+    if (expiresAt === 0) return 'PERMANENT';
+    const diff = expiresAt - Date.now();
+    if (diff <= 0) return 'EXPIRED';
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    if (d > 0) return `${d}d ${h}h ${m}m`;
+    if (h > 0) return `${h}h ${m}m ${s}s`;
+    return `${m}m ${s}s`;
+}
+
+// Update key icon appearance based on token status
+function updateKeyIcon() {
+    const keyEl = document.getElementById('key-icon');
+    if (isAdFreeUser()) {
+        keyEl.classList.add('token-active');
+        keyEl.querySelector('i').className = 'fas fa-shield-alt';
+    } else {
+        keyEl.classList.remove('token-active');
+        keyEl.querySelector('i').className = 'fas fa-key';
+        revokeToken(); // Clean up expired token
+    }
+}
+
+// Live countdown interval for status view
+let tokenCountdownInt = null;
+
+function startTokenCountdown() {
+    clearInterval(tokenCountdownInt);
+    const data = getStoredToken();
+    if (!data) return;
+    const update = () => {
+        if (!isAdFreeUser()) {
+            revokeToken();
+            updateKeyIcon();
+            clearInterval(tokenCountdownInt);
+            // Auto-switch back to input panel
+            document.getElementById('token-status-view').classList.remove('visible');
+            document.getElementById('token-input-panel').style.display = 'block';
+            document.getElementById('token-msg').textContent = '⏰ Token expire ho gaya!';
+            document.getElementById('token-msg').className = 'token-msg error';
+            return;
+        }
+        document.getElementById('token-time-big').textContent = formatTimeLeft(data.expiresAt);
+    };
+    update();
+    tokenCountdownInt = setInterval(update, 1000);
+}
+
+// Key icon click — show modal
 document.getElementById('key-icon').addEventListener('click', () => {
-    document.getElementById('token-modal').classList.remove('hidden');
-    document.getElementById('token-input').focus();
+    const modal = document.getElementById('token-modal');
+    modal.classList.remove('hidden');
+
+    if (isAdFreeUser()) {
+        // Show status view with countdown
+        document.getElementById('token-input-panel').style.display = 'none';
+        document.getElementById('token-msg').textContent = '';
+        document.getElementById('token-status-view').classList.add('visible');
+        startTokenCountdown();
+    } else {
+        // Show input form
+        document.getElementById('token-input-panel').style.display = 'block';
+        document.getElementById('token-status-view').classList.remove('visible');
+        document.getElementById('token-input').focus();
+    }
 });
+
 document.getElementById('token-close').addEventListener('click', () => {
     document.getElementById('token-modal').classList.add('hidden');
     document.getElementById('token-msg').textContent = '';
     document.getElementById('token-input').value = '';
+    clearInterval(tokenCountdownInt);
 });
+
 document.getElementById('token-submit').addEventListener('click', () => {
-    const val = document.getElementById('token-input').value.trim();
+    const val   = document.getElementById('token-input').value.trim();
     const msgEl = document.getElementById('token-msg');
 
     if (!val) { msgEl.textContent = '⚠️ Code empty hai!'; msgEl.className = 'token-msg error'; return; }
 
-    if (!isTokenValid(val)) {
-        msgEl.textContent = '❌ Invalid code!'; msgEl.className = 'token-msg error'; return;
-    }
-    if (isTokenUsed(val)) {
+    const tokenDef = findToken(val);
+    if (!tokenDef) { msgEl.textContent = '❌ Invalid code!'; msgEl.className = 'token-msg error'; return; }
+
+    // Check if already used by someone else (we use global used list for multi-device block)
+    const usedList = JSON.parse(localStorage.getItem('afz_used_global') || '[]');
+    if (usedList.includes(val.toUpperCase()) && !isTokenUsedByThis(val)) {
         msgEl.textContent = '⚠️ Yeh code pehle use ho chuka hai!'; msgEl.className = 'token-msg error'; return;
     }
 
-    // Valid & unused
-    markTokenUsed(val);
-    setSessionAdFree();
-    msgEl.textContent = '✅ Ad-Free mode activate! Enjoy 🎌'; msgEl.className = 'token-msg success';
-    setTimeout(() => document.getElementById('token-modal').classList.add('hidden'), 1800);
+    // Save for this user
+    saveActiveToken(val, tokenDef.hours);
+
+    // Mark used globally
+    if (!usedList.includes(val.toUpperCase())) {
+        usedList.push(val.toUpperCase());
+        localStorage.setItem('afz_used_global', JSON.stringify(usedList));
+    }
+
+    updateKeyIcon();
+    msgEl.textContent = tokenDef.hours === 0
+        ? '✅ Permanent Ad-Free active! 🎌'
+        : `✅ Ad-Free active for ${tokenDef.hours}h! Enjoy 🎌`;
+    msgEl.className = 'token-msg success';
+
+    setTimeout(() => {
+        document.getElementById('token-modal').classList.add('hidden');
+        document.getElementById('token-input').value = '';
+    }, 1800);
 });
 
-/* ════════════════════════════════════════════
-   AD SYSTEM
-════════════════════════════════════════════ */
-let adList      = [];
-let adIndex     = 0;
-let targetUrl   = '';
-let adTimerInt  = null;
-let adTimerSec  = AD_TIMER_SECONDS; // ⏱️ yeh CONFIG se aata hai
+// Revoke button
+document.getElementById('token-revoke-btn').addEventListener('click', () => {
+    revokeToken();
+    updateKeyIcon();
+    clearInterval(tokenCountdownInt);
+    document.getElementById('token-status-view').classList.remove('visible');
+    document.getElementById('token-input-panel').style.display = 'block';
+    document.getElementById('token-msg').textContent = '🔓 Token revoked.';
+    document.getElementById('token-msg').className = 'token-msg error';
+});
+
+// On page load — update key icon
+updateKeyIcon();
+// Auto-revoke check every minute
+setInterval(updateKeyIcon, 60000);
+
+/* ════════════════════════════════════════
+   📺 AD SYSTEM
+════════════════════════════════════════ */
+let adList     = [];
+let adIndex    = 0;
+let targetUrl  = '';
+let adTimerInt = null;
+let adTimerSec = AD_TIMER_SECONDS;
+let videoMuted = false; // default: sound ON
+
+function isVideoUrl(url) {
+    return ['.mp4','.webm','.ogg','.mov','.m4v'].some(e => url.toLowerCase().includes(e));
+}
 
 function getAdsFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const adsParam = params.get('ads');
     if (!adsParam) return { mode: 'default' };
     if (adsParam === 'free') return { mode: 'free' };
-    // Custom ads — base64 encoded JSON array
     try {
-        const decoded = atob(adsParam);
-        const arr = JSON.parse(decoded);
+        const arr = JSON.parse(atob(adsParam));
         if (Array.isArray(arr) && arr.length > 0) return { mode: 'custom', ads: arr };
     } catch(e) {}
     return { mode: 'default' };
@@ -619,54 +693,54 @@ function buildAdDots(total, currentIdx) {
     }
 }
 
-function isVideoUrl(url) {
-    const ext = ['.mp4','.webm','.ogg','.mov','.m4v'];
-    return ext.some(e => url.toLowerCase().includes(e));
-}
-
-function showAdPage(index) {
+function showAdPage(idx) {
     const total = adList.length;
-    adIndex = index;
+    adIndex = idx;
+    document.getElementById('ad-counter').textContent = `${idx+1} OF ${total}`;
+    buildAdDots(total, idx);
 
-    // Counter
-    document.getElementById('ad-counter').textContent = `${index+1} OF ${total}`;
-    buildAdDots(total, index);
-
-    // Content
     const wrap = document.getElementById('ad-content-wrap');
-    const url  = adList[index];
+    const url  = adList[idx];
 
     if (isVideoUrl(url)) {
-        wrap.innerHTML = `<video class="ad-video" src="${url}" autoplay muted playsinline loop></video>`;
+        // ✅ Video: audio ON by default, mute toggle button
+        wrap.innerHTML = `
+            <video class="ad-video" id="ad-video-el" src="${url}" autoplay playsinline loop></video>
+            <div class="ad-mute-btn" id="ad-mute-btn" title="Mute/Unmute">
+                <i class="fas fa-volume-up"></i>
+            </div>`;
+        const vid = document.getElementById('ad-video-el');
+        const muteBtn = document.getElementById('ad-mute-btn');
+        vid.muted = videoMuted; // restore last mute state
+        muteBtn.querySelector('i').className = videoMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+        muteBtn.addEventListener('click', () => {
+            videoMuted = !videoMuted;
+            vid.muted = videoMuted;
+            muteBtn.querySelector('i').className = videoMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+        });
     } else {
+        // ✅ Non-video: show "AD LINK" as hyperlink — no URL shown
         wrap.innerHTML = `
         <div class="ad-link-msg">
             <div class="ad-link-icon">📺</div>
-            <div class="ad-link-title">AD ${index+1} OF ${total}</div>
+            <div class="ad-link-title">AD ${idx+1} OF ${total}</div>
             <div class="ad-link-text">
-                Press <b>Continue</b> below and<br>
-                wait <b>10 seconds</b> then come back.<br><br>
-                <span style="color:rgba(0,255,224,0.4);font-size:9px;">${url.substring(0,40)}...</span>
+                Please visit <a class="ad-link-hyperlink" href="${url}" target="_blank" rel="noopener">AD LINK</a><br>
+                then come back and wait for the timer.<br>
+                Press <b>Continue</b> when ready.
             </div>
         </div>`;
-        // Open the link in background for non-video ads
         setTimeout(() => { window.open(url, '_blank'); }, 300);
     }
 
-    // Hide continue and finish
     document.getElementById('ad-continue').classList.add('hidden');
     document.getElementById('ad-finish').classList.add('hidden');
-
-    // Timer
-    startAdTimer(index, total);
+    startAdTimer(idx, total);
 }
 
-function startAdTimer(index, total) {
+function startAdTimer(idx, total) {
     clearInterval(adTimerInt);
-
-    // ⏱️ TIMER RESET — yahan se timer shuru hota hai
-    // 👉 Value aati hai upar se: const AD_TIMER_SECONDS = 10  (Line 439)
-    // 👉 Wahan badlo — yeh automatically yahan bhi change ho jayega
+    // ⏱️ TIMER — value comes from AD_TIMER_SECONDS (Config section above)
     adTimerSec = AD_TIMER_SECONDS;
     const circumference = 144.51;
     const circle = document.getElementById('timer-circle');
@@ -674,56 +748,39 @@ function startAdTimer(index, total) {
 
     function tick() {
         numEl.textContent = adTimerSec;
-        const offset = circumference - (adTimerSec / AD_TIMER_SECONDS) * circumference;
-        circle.style.strokeDashoffset = offset;
-
+        circle.style.strokeDashoffset = circumference - (adTimerSec / AD_TIMER_SECONDS) * circumference;
         if (adTimerSec <= 0) {
             clearInterval(adTimerInt);
-            // Show continue OR finish button
-            if (index + 1 < total) {
-                // More ads remaining — show Continue
+            if (idx + 1 < total) {
                 document.getElementById('ad-continue').classList.remove('hidden');
             } else {
-                // Last ad done — show Open button + confetti
                 showFinish();
             }
         }
         adTimerSec--;
     }
-
-    tick(); // Run immediately
-    // ⏱️ COUNTDOWN INTERVAL — 1000ms = 1 second
-    // 👉 Yeh mat badlo — sirf AD_TIMER_SECONDS (Line 439) badlo
+    tick();
     adTimerInt = setInterval(tick, 1000);
 }
 
 function showFinish() {
     document.getElementById('ad-finish').classList.remove('hidden');
-    document.getElementById('ad-open-btn').href = targetUrl;
+    // Set target URL on the Open button
+    document.getElementById('ad-open-btn').dataset.href = targetUrl;
     launchConfetti();
 }
 
 function launchConfetti() {
-    const confettiColors = ['#ff6a00','#ff007a','#00ffe0','#9b00ff','#ffd700','#ffffff'];
+    const cols = ['#ff6a00','#ff007a','#00ffe0','#9b00ff','#ffd700','#ffffff'];
     ['confetti-left','confetti-right'].forEach((id, side) => {
         const el = document.getElementById(id);
         el.innerHTML = '';
         for (let i = 0; i < 12; i++) {
             const p = document.createElement('div');
             p.className = 'confetti-piece';
-            const color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
             const cx = (side === 0 ? 1 : -1) * (Math.random() * 80 + 20);
             const cy = -(Math.random() * 120 + 40);
-            p.style.cssText = `
-                background:${color};
-                left:${Math.random()*30}px;
-                top:${Math.random()*20}px;
-                width:${Math.random()*8+4}px;
-                height:${Math.random()*8+4}px;
-                --cx:${cx}px; --cy:${cy}px;
-                animation-delay:${Math.random()*0.4}s;
-                animation-duration:${Math.random()*0.5+0.9}s;
-            `;
+            p.style.cssText = `background:${cols[Math.floor(Math.random()*cols.length)]};left:${Math.random()*30}px;top:${Math.random()*20}px;width:${Math.random()*8+4}px;height:${Math.random()*8+4}px;--cx:${cx}px;--cy:${cy}px;animation-delay:${Math.random()*0.4}s;animation-duration:${Math.random()*0.5+0.9}s;`;
             el.appendChild(p);
         }
     });
@@ -736,17 +793,32 @@ function startAdFlow(ads, destUrl) {
     showAdPage(0);
 }
 
-// Continue button click
+// Continue button
 document.getElementById('ad-continue').addEventListener('click', () => {
     playSound();
-    if (adIndex + 1 < adList.length) {
-        showAdPage(adIndex + 1);
-    }
+    if (adIndex + 1 < adList.length) showAdPage(adIndex + 1);
 });
 
-/* ════════════════════════════════════════════
+// ✅ OPEN ANIME button — sound + click particles + navigate
+document.getElementById('ad-open-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    playSound();
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+        window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+    }
+    // Click particles at tap position
+    spawnParticles(e.clientX || window.innerWidth/2, e.clientY || window.innerHeight/2);
+    // Scale animation
+    this.style.transform = 'scale(0.95)';
+    setTimeout(() => { this.style.transform = ''; }, 150);
+    // Navigate
+    const dest = this.dataset.href;
+    if (dest) setTimeout(() => { window.location.href = dest; }, 200);
+});
+
+/* ════════════════════════════════════════
    IMAGE ROTATION
-════════════════════════════════════════════ */
+════════════════════════════════════════ */
 let lastImgIndex = 0;
 function getNextImage() {
     let idx;
@@ -763,9 +835,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-/* ════════════════════════════════════════════
-   HOW TO OPEN BUTTON — random style
-════════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   HOW TO OPEN BUTTON — random style 5/7
+════════════════════════════════════════ */
 (function injectHowBtn() {
     const url = "https://t.me/Anime_fanz_watching/8";
     const style = Math.random() < 0.5 ? 5 : 7;
@@ -775,59 +847,57 @@ document.addEventListener('DOMContentLoaded', () => {
             <div><div class="how-title">How to open the Anime</div><div class="how-sub">Tap to learn 🎬</div></div>
         </div>
         <div class="how-arrow"><i class="fas fa-chevron-right"></i></div>`;
-    let html = style === 5
+    document.getElementById('how-btn-container').innerHTML = style === 5
         ? `<div class="how-style5-wrap"><a href="${url}" class="how-btn tap-btn">${inner}</a></div>`
         : `<a href="${url}" class="how-btn how-style7 tap-btn">${inner}</a>`;
-    document.getElementById('how-btn-container').innerHTML = html;
 })();
 
-/* ════════════════════════════════════════════
-   TELEGRAM WEBAPP
-════════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   TELEGRAM + SOUND
+════════════════════════════════════════ */
 const tg = window.Telegram.WebApp;
 tg.expand(); tg.ready();
 tg.BackButton.show();
 tg.BackButton.onClick(() => tg.close());
 const audioEl = document.getElementById('click-sound');
-
 function playSound() {
     audioEl.src = SOUND_LIST[Math.floor(Math.random() * SOUND_LIST.length)];
     audioEl.currentTime = 0;
     audioEl.play().catch(() => {});
 }
 
-/* ════════════════════════════════════════════
+/* ════════════════════════════════════════
    TITLE LOGIC
-════════════════════════════════════════════ */
+════════════════════════════════════════ */
 (function initTitle() {
     try {
         const params = new URLSearchParams(window.location.search);
         const titleRaw = params.get('title');
         if (titleRaw && titleRaw.trim() !== '') {
-            let titleFinal = titleRaw;
-            if (titleRaw.includes('%')) { try { titleFinal = decodeURIComponent(titleRaw); } catch(e) {} }
-            document.getElementById('title-text').textContent = titleFinal;
+            let t = titleRaw;
+            if (t.includes('%')) { try { t = decodeURIComponent(t); } catch(e) {} }
+            document.getElementById('title-text').textContent = t;
             document.getElementById('title-section').style.display = 'block';
         }
-    } catch(err) { console.warn('Title init error:', err); }
+    } catch(e) {}
 })();
 
-/* ════════════════════════════════════════════
+/* ════════════════════════════════════════
    SPARKLES
-════════════════════════════════════════════ */
+════════════════════════════════════════ */
 const colors = ['#ff6a00','#ff007a','#00ffe0','#9b00ff','#ffffff'];
 setInterval(() => {
     const s = document.createElement('div');
     s.className = 'sparkle';
-    const size = Math.random() * 3 + 2;
-    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}vw;bottom:${Math.random()*20}vh;background:${colors[Math.floor(Math.random()*colors.length)]};box-shadow:0 0 8px currentColor;animation-duration:${Math.random()*3+3}s;`;
+    const sz = Math.random() * 3 + 2;
+    s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}vw;bottom:${Math.random()*20}vh;background:${colors[Math.floor(Math.random()*colors.length)]};box-shadow:0 0 8px currentColor;animation-duration:${Math.random()*3+3}s;`;
     document.body.appendChild(s);
     setTimeout(() => s.remove(), 6000);
 }, SETTINGS.sparkle_interval);
 
-/* ════════════════════════════════════════════
+/* ════════════════════════════════════════
    CURSOR TRAIL
-════════════════════════════════════════════ */
+════════════════════════════════════════ */
 let trailCount = 0;
 document.addEventListener('mousemove', (e) => {
     if (trailCount++ % 2 !== 0) return;
@@ -839,13 +909,13 @@ document.addEventListener('mousemove', (e) => {
     setTimeout(() => t.remove(), 600);
 });
 
-/* ════════════════════════════════════════════
-   CLICK PARTICLES
-════════════════════════════════════════════ */
-window.addEventListener('click', (e) => {
+/* ════════════════════════════════════════
+   CLICK PARTICLES (global)
+════════════════════════════════════════ */
+function spawnParticles(cx, cy) {
     const ring = document.createElement('div');
     ring.className = 'click-ring';
-    ring.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;`;
+    ring.style.cssText = `left:${cx}px;top:${cy}px;`;
     document.body.appendChild(ring);
     setTimeout(() => ring.remove(), 500);
     const fireColors = [['#ffcc00','#ff8800','#ff4400'],['#ff00aa','#ff007a','#cc0055'],['#00ffe0','#00aacc','#0077aa']];
@@ -855,37 +925,34 @@ window.addEventListener('click', (e) => {
         p.className = 'fire-particle';
         const angle = Math.random() * Math.PI * 2;
         const vel = Math.random() * 130 + 30;
-        const size = Math.random() * 7 + 3;
+        const sz = Math.random() * 7 + 3;
         const color = palette[Math.floor(Math.random()*palette.length)];
-        p.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;width:${size}px;height:${size}px;background:${color};box-shadow:0 0 ${size*2}px ${color};--tx:${Math.cos(angle)*vel}px;--ty:${Math.sin(angle)*vel}px;--dur:${Math.random()*0.4+0.4}s;`;
+        p.style.cssText = `left:${cx}px;top:${cy}px;width:${sz}px;height:${sz}px;background:${color};box-shadow:0 0 ${sz*2}px ${color};--tx:${Math.cos(angle)*vel}px;--ty:${Math.sin(angle)*vel}px;--dur:${Math.random()*0.4+0.4}s;`;
         document.body.appendChild(p);
         setTimeout(() => p.remove(), 800);
     }
-});
+}
+window.addEventListener('click', (e) => spawnParticles(e.clientX, e.clientY));
 
-/* ════════════════════════════════════════════
-   START BUTTON — Main logic with ad system
-════════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   START BUTTON
+════════════════════════════════════════ */
 document.getElementById('main-btn').addEventListener('click', function() {
     playSound();
     if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
     this.classList.add('click-active');
 
     // Black hole effect
-    const btnContainer = document.querySelector('.btn-container');
-    btnContainer.classList.remove('bh-firing');
-    this.classList.remove('bh-img-fire');
-    void btnContainer.offsetWidth;
-    btnContainer.classList.add('bh-firing');
-    this.classList.add('bh-img-fire');
+    const bc = document.querySelector('.btn-container');
+    bc.classList.remove('bh-firing'); this.classList.remove('bh-img-fire');
+    void bc.offsetWidth;
+    bc.classList.add('bh-firing'); this.classList.add('bh-img-fire');
     setTimeout(() => { this.style.backgroundImage = `url('${getNextImage()}')`; }, 950);
-    setTimeout(() => { btnContainer.classList.remove('bh-firing'); this.classList.remove('bh-img-fire'); }, 1400);
+    setTimeout(() => { bc.classList.remove('bh-firing'); this.classList.remove('bh-img-fire'); }, 1400);
 
     const self = this;
     setTimeout(() => {
         self.classList.remove('click-active');
-
-        // Get target URL
         const params = new URLSearchParams(window.location.search);
         const targetParam = params.get('target');
         if (!targetParam) { tg.showPopup({ message: 'Target URL missing!' }); return; }
@@ -894,38 +961,22 @@ document.getElementById('main-btn').addEventListener('click', function() {
         try { destUrl = SETTINGS.use_base64 ? atob(targetParam) : decodeURIComponent(targetParam); }
         catch { tg.showPopup({ message: SETTINGS.error_msg }); return; }
 
-        // Check ad-free (session or URL param)
+        // Ad-free user? Skip all ads
+        if (isAdFreeUser()) { window.location.href = destUrl; return; }
+
         const adsInfo = getAdsFromUrl();
+        if (adsInfo.mode === 'free') { window.location.href = destUrl; return; }
 
-        if (isSessionAdFree() || adsInfo.mode === 'free') {
-            // ✅ Ad-free — seedha navigate
-            window.location.href = destUrl;
-            return;
-        }
+        const adsToShow = adsInfo.mode === 'custom' ? adsInfo.ads : DEFAULT_ADS;
+        if (!adsToShow || adsToShow.length === 0) { window.location.href = destUrl; return; }
 
-        // Choose which ads to show
-        let adsToShow = [];
-        if (adsInfo.mode === 'custom') {
-            adsToShow = adsInfo.ads;   // bot se custom ads aaye
-        } else {
-            adsToShow = DEFAULT_ADS;   // default ads from config
-        }
-
-        // If no ads configured — skip
-        if (!adsToShow || adsToShow.length === 0) {
-            window.location.href = destUrl;
-            return;
-        }
-
-        // Show ad overlay
         startAdFlow(adsToShow, destUrl);
-
     }, SETTINGS.rest_interval);
 });
 
-/* ════════════════════════════════════════════
-   OTHER BUTTONS — normal click
-════════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   OTHER BUTTONS
+════════════════════════════════════════ */
 document.querySelectorAll('.tap-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
         e.preventDefault();
