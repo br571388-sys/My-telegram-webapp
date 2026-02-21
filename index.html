@@ -11,8 +11,6 @@
     :root{ --orange:#ff6a00; --pink:#ff007a; --cyan:#00ffe0; --purple:#9b00ff; --bg:#020510; --glass:rgba(255,255,255,0.04); }
     *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
     body{ background-color:var(--bg); font-family:'Exo 2',sans-serif; color:white; min-height:100vh; display:flex; flex-direction:column; align-items:center; overflow-x:hidden; position:relative; }
-
-    /* BG */
     .bg-scene{ position:fixed; inset:0; z-index:-1; overflow:hidden; }
     .bg-scene::before{ content:''; position:absolute; inset:-50%; background:radial-gradient(ellipse 60% 40% at 20% 30%,rgba(255,106,0,0.12) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 80% 70%,rgba(155,0,255,0.12) 0%,transparent 60%),radial-gradient(ellipse 70% 40% at 50% 90%,rgba(0,255,224,0.08) 0%,transparent 60%); animation:aurora-drift 18s ease-in-out infinite alternate; }
     @keyframes aurora-drift{ 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(-4%,3%) scale(1.05)} 66%{transform:translate(4%,-3%) scale(0.97)} 100%{transform:translate(-2%,5%) scale(1.03)} }
@@ -69,7 +67,6 @@
     .token-msg.success{ color:#00ff88; }
     .token-msg.error{ color:var(--pink); }
     .token-close{ background:transparent; border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:rgba(255,255,255,0.3); font-size:10px; letter-spacing:2px; padding:6px 14px; cursor:pointer; font-family:'Exo 2',sans-serif; }
-    /* Token active status panel */
     .token-status-view{ display:none; text-align:center; }
     .token-status-view.visible{ display:block; }
     .token-active-badge{ display:inline-flex; align-items:center; gap:7px; background:rgba(0,255,136,0.07); border:1px solid rgba(0,255,136,0.25); border-radius:20px; padding:6px 16px; margin-bottom:14px; }
@@ -80,13 +77,18 @@
     .token-time-sub{ font-size:9px; color:rgba(255,255,255,0.22); letter-spacing:3px; text-transform:uppercase; margin-bottom:18px; }
     .token-input-panel{ display:block; }
 
-    /* ═══════════════════════════════════════
-       AD OVERLAY — DESIGN A (Original)
-    ═══════════════════════════════════════ */
+    /* AD OVERLAY */
     .ad-overlay{ position:fixed; inset:0; z-index:8000; background:rgba(2,5,16,0.97); backdrop-filter:blur(16px); display:flex; flex-direction:column; align-items:center; padding:16px; overflow-y:auto; }
     .ad-overlay.hidden{ display:none; }
     .ad-note{ font-family:'Orbitron',sans-serif; font-size:9px; letter-spacing:1.4px; color:rgba(255,255,255,0.3); text-align:center; line-height:1.8; padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.05); margin-bottom:14px; width:100%; max-width:400px; }
     .ad-note span{ color:rgba(0,255,224,0.55); }
+
+    /* ✅ AD PAGE COUNTER + PROGRESS BAR */
+    .ad-page-strip{ width:100%; max-width:400px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .ad-page-label{ font-family:'Orbitron',sans-serif; font-size:10px; letter-spacing:3px; color:var(--cyan); white-space:nowrap; flex-shrink:0; }
+    .ad-page-bar-track{ flex:1; height:4px; background:rgba(255,255,255,0.07); border-radius:4px; overflow:hidden; }
+    .ad-page-bar-fill{ height:100%; background:linear-gradient(90deg,var(--cyan),var(--purple)); border-radius:4px; transition:width 0.5s ease; }
+
     .ad-counter-wrap{ display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:14px; }
     .ad-counter{ font-family:'Orbitron',sans-serif; font-size:11px; letter-spacing:3px; color:var(--cyan); }
     .ad-dots{ display:flex; gap:5px; }
@@ -131,77 +133,11 @@
     .ad-open-emoji{ text-align:center; font-size:22px; letter-spacing:6px; margin-bottom:4px; animation:emoji-bounce 0.6s ease-out; }
     @keyframes emoji-bounce{ 0%{transform:scale(0)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
 
-    /* ═══════════════════════════════════════
-       AD OVERLAY — DESIGN B (New / Screenshot Style)
-    ═══════════════════════════════════════ */
-    .ad-overlay-b{ position:fixed; inset:0; z-index:8000; background:#0d0d1a; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:0; overflow-y:auto; }
-    .ad-overlay-b.hidden{ display:none; }
-
-    /* Top bar */
-    .adb-topbar{ width:100%; background:linear-gradient(90deg,#1a0030,#0d0d1a); padding:10px 16px; border-bottom:1px solid rgba(155,0,255,0.2); display:flex; align-items:center; justify-content:space-between; }
-    .adb-brand{ font-family:'Orbitron',sans-serif; font-size:10px; letter-spacing:3px; color:rgba(155,0,255,0.8); }
-    .adb-dots-wrap{ display:flex; gap:5px; align-items:center; }
-    .adb-dot{ width:8px; height:8px; border-radius:50%; transition:all 0.3s; }
-    .adb-dot.adb-active{ background:var(--cyan); box-shadow:0 0 8px var(--cyan); }
-    .adb-dot.adb-done{ background:rgba(0,255,224,0.4); }
-    .adb-dot.adb-pending{ background:rgba(255,255,255,0.12); }
-
-    /* Note */
-    .adb-note{ width:100%; max-width:420px; text-align:center; padding:10px 16px 6px; font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.5px; line-height:1.7; }
-    .adb-note .adb-note-hl{ color:var(--cyan); }
-
-    /* Progress bar */
-    .adb-progress-bar-wrap{ width:100%; max-width:420px; padding:0 16px 12px; }
-    .adb-progress-step{ font-family:'Orbitron',sans-serif; font-size:9px; letter-spacing:3px; color:var(--cyan); margin-bottom:5px; }
-    .adb-progress-track{ height:3px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; }
-    .adb-progress-fill{ height:100%; background:linear-gradient(90deg,var(--purple),var(--cyan)); border-radius:4px; transition:width 0.5s ease; }
-
-    /* TV Card */
-    .adb-card{ width:90%; max-width:380px; background:linear-gradient(145deg,#0f0f22,#1a0d28); border:1px solid rgba(155,0,255,0.25); border-radius:22px; padding:28px 22px; text-align:center; margin:10px 0 14px; position:relative; overflow:hidden; }
-    .adb-card::before{ content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--purple),var(--cyan),transparent); }
-    .adb-card::after{ content:''; position:absolute; bottom:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(155,0,255,0.3),transparent); }
-    .adb-tv-icon{ font-size:36px; margin-bottom:8px; filter:drop-shadow(0 0 10px rgba(0,255,224,0.3)); opacity:0.7; }
-    .adb-ad-label{ font-family:'Orbitron',sans-serif; font-size:9px; letter-spacing:3px; color:rgba(255,255,255,0.25); margin-bottom:10px; }
-    .adb-card-text{ font-size:11px; color:rgba(255,255,255,0.6); line-height:2; letter-spacing:0.5px; }
-    .adb-card-link{ color:var(--cyan); text-decoration:underline; text-underline-offset:3px; font-weight:700; cursor:pointer; }
-    .adb-card-hint{ font-size:10px; color:rgba(255,255,255,0.25); margin-top:8px; letter-spacing:0.5px; }
-
-    /* Timer B */
-    .adb-timer-wrap{ display:flex; flex-direction:column; align-items:center; gap:4px; margin-bottom:14px; }
-    .adb-timer-ring{ position:relative; width:70px; height:70px; }
-    .adb-timer-ring svg{ transform:rotate(-90deg); }
-    .adb-timer-ring circle{ fill:none; stroke-width:4; stroke-linecap:round; }
-    .adb-timer-ring .adb-track{ stroke:rgba(155,0,255,0.15); }
-    .adb-timer-ring .adb-progress{ stroke:url(#timerGrad); transition:stroke-dashoffset 1s linear; }
-    .adb-timer-num-b{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Orbitron',sans-serif; font-size:20px; font-weight:700; color:var(--cyan); }
-    .adb-timer-label{ font-size:8px; letter-spacing:3px; color:rgba(255,255,255,0.18); text-transform:uppercase; }
-
-    /* Continue B */
-    .adb-continue{ width:90%; max-width:380px; padding:13px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:14px; color:rgba(255,255,255,0.65); font-size:11px; letter-spacing:2px; text-transform:uppercase; font-family:'Exo 2',sans-serif; cursor:pointer; transition:all 0.2s; }
-    .adb-continue:active{ transform:scale(0.97); }
-    .adb-continue.hidden{ display:none; pointer-events:none; }
-    .adb-continue:not(.hidden){ animation:fade-in-up 0.4s ease both; }
-
-    /* Finish B */
-    .adb-finish{ width:90%; max-width:380px; position:relative; margin-bottom:20px; }
-    .adb-finish.hidden{ display:none; }
-    .adb-finish:not(.hidden){ animation:fade-in-up 0.5s ease both; }
-    .adb-finish-emoji{ text-align:center; font-size:24px; letter-spacing:6px; margin-bottom:8px; animation:emoji-bounce 0.6s ease-out; }
-    .adb-open-btn{ display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg,rgba(0,255,224,0.05),rgba(155,0,255,0.08)); border:1px solid rgba(0,255,224,0.2); border-radius:18px; padding:16px 20px; position:relative; overflow:hidden; color:white; cursor:pointer; -webkit-touch-callout:none; user-select:none; -webkit-user-select:none; }
-    .adb-open-btn::before{ content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--cyan),transparent); }
-    .adb-open-btn .adb-btn-accent{ position:absolute; left:0; top:15%; bottom:15%; width:3px; background:linear-gradient(180deg,var(--cyan),var(--purple)); box-shadow:0 0 10px var(--cyan); border-radius:0 3px 3px 0; }
-    .adb-open-btn .adb-btn-text .adb-btn-label{ font-weight:700; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.9); }
-    .adb-open-btn .adb-btn-text .adb-btn-sub{ font-size:10px; color:rgba(255,255,255,0.35); margin-top:3px; letter-spacing:1px; }
-    .adb-open-btn .adb-btn-icon{ width:44px; height:44px; background:linear-gradient(135deg,rgba(0,255,224,0.12),rgba(155,0,255,0.12)); border-radius:12px; border:1px solid rgba(0,255,224,0.2); display:flex; align-items:center; justify-content:center; }
-    .adb-open-btn .adb-btn-icon i{ font-size:18px; background:linear-gradient(135deg,var(--cyan),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(0,255,224,0.6)); }
-
     /* CARD */
     .card{ width:92%; max-width:400px; background:var(--glass); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-radius:28px; padding:28px 20px; border:1px solid rgba(255,255,255,0.06); text-align:center; position:relative; animation:fade-in-up 0.8s ease both 0.5s; }
     .card::before,.card::after{ content:''; position:absolute; width:24px; height:24px; border-color:var(--cyan); border-style:solid; }
     .card::before{ top:-1px; left:-1px; border-width:2px 0 0 2px; border-radius:8px 0 0 0; }
     .card::after{ bottom:-1px; right:-1px; border-width:0 2px 2px 0; border-radius:0 0 8px 0; }
-
-    /* HUB BUTTON */
     .hub-btn{ background:linear-gradient(135deg,rgba(0,200,180,0.08),rgba(0,100,150,0.08)); border:1px solid rgba(0,255,224,0.15); border-radius:16px; padding:15px 18px; display:flex; align-items:center; justify-content:space-between; text-decoration:none; color:white; margin-bottom:28px; position:relative; overflow:hidden; transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
     .hub-btn::before{ content:''; position:absolute; inset:0; background:linear-gradient(135deg,transparent 0%,rgba(0,255,224,0.06) 100%); opacity:0; transition:opacity 0.3s; }
     .hub-btn:hover::before,.hub-btn:active::before{ opacity:1; }
@@ -211,16 +147,12 @@
     .tg-icon{ font-size:20px; color:var(--cyan); filter:drop-shadow(0 0 8px var(--cyan)); animation:icon-bounce 3s ease-in-out infinite; }
     @keyframes icon-bounce{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
     .hub-arrow{ width:32px; height:32px; border-radius:50%; background:rgba(0,255,224,0.1); border:1px solid rgba(0,255,224,0.3); display:flex; align-items:center; justify-content:center; color:var(--cyan); font-size:12px; }
-
-    /* TITLE SECTION */
     .title-section{ margin-bottom:20px; display:none; animation:fade-in-up 0.6s ease both; text-align:center; padding:4px 0; }
     .title-label{ font-size:8px; letter-spacing:5px; color:rgba(255,255,255,0.25); text-transform:uppercase; margin-bottom:8px; }
     .title-divider{ display:flex; align-items:center; gap:10px; margin-bottom:8px; padding:0 10px; }
     .title-divider::before,.title-divider::after{ content:''; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--pink),transparent); }
     .title-divider-icon{ font-size:11px; color:var(--pink); filter:drop-shadow(0 0 6px var(--pink)); animation:icon-bounce 3s ease-in-out infinite; }
     .title-value{ font-family:'Rajdhani',sans-serif; font-size:clamp(16px,5vw,22px); font-weight:700; letter-spacing:3px; text-transform:uppercase; background:linear-gradient(135deg,white 30%,var(--cyan) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; word-break:break-word; line-height:1.2; padding:0 8px; }
-
-    /* START BUTTON */
     .btn-container{ position:relative; width:160px; height:160px; margin:0 auto 28px; }
     @keyframes bh-ring-explode{ 0%{transform:scale(1);opacity:1} 40%{transform:scale(1.65);opacity:0.2} 60%{transform:scale(1.65);opacity:0} 61%{transform:scale(0.8);opacity:0} 85%{transform:scale(0.8);opacity:0.9} 100%{transform:scale(1);opacity:1} }
     .bh-firing .orbit-outer,.bh-firing .orbit-inner,.bh-firing .orbit-dot,.bh-firing .orbit-dot2{ animation:bh-ring-explode 0.8s ease forwards !important; }
@@ -242,8 +174,6 @@
     .start-btn::after{ content:''; position:absolute; top:-50%; left:-60%; width:50%; height:200%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent); transform:skewX(-20deg); animation:btn-shine 4s ease-in-out infinite; }
     @keyframes btn-shine{ 0%,100%{left:-60%;opacity:0} 50%{left:160%;opacity:1} }
     .start-label{ position:relative; z-index:2; padding-bottom:10px; text-shadow:0 2px 12px rgba(0,0,0,0.9); }
-
-    /* ACTION BUTTONS */
     .actions{ display:flex; flex-direction:column; gap:12px; }
     .btn-modern{ background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:16px; padding:16px 20px; display:flex; justify-content:space-between; align-items:center; text-decoration:none; position:relative; overflow:hidden; transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
     .btn-modern::before{ content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,106,0,0.06),rgba(155,0,255,0.06)); opacity:0; transition:opacity 0.3s; }
@@ -255,14 +185,10 @@
     .btn-icon-wrap i{ font-size:18px; background:linear-gradient(135deg,var(--orange),var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(255,106,0,0.6)); }
     .btn-modern:nth-child(2) .btn-accent-bar{ background:linear-gradient(180deg,var(--cyan),var(--purple)); box-shadow:0 0 10px var(--cyan); }
     .btn-modern:nth-child(2) .btn-icon-wrap i{ background:linear-gradient(135deg,var(--cyan),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 6px rgba(0,255,224,0.6)); }
-
-    /* STATUS */
     .status-bar{ margin-top:28px; display:flex; align-items:center; justify-content:center; gap:8px; }
     .status-dot{ width:6px; height:6px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); animation:status-blink 2s ease-in-out infinite; }
     .status-text{ font-size:9px; letter-spacing:3px; color:rgba(255,255,255,0.2); font-weight:600; text-transform:uppercase; }
     .card-bottom{ margin-top:14px; margin-bottom:24px; }
-
-    /* HOW TO OPEN BUTTON */
     .how-btn{ display:flex; align-items:center; justify-content:space-between; text-decoration:none; color:white; margin-top:20px; position:relative; overflow:hidden; padding:14px 16px; transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
     .how-btn:active{ transform:scale(0.97); }
     .how-btn-left{ display:flex; align-items:center; gap:14px; position:relative; z-index:2; }
@@ -285,8 +211,6 @@
     .how-style7 .how-title{ background:linear-gradient(90deg,#ffd700,var(--orange)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
     .how-style7 .how-sub{ color:rgba(255,200,0,0.45); }
     .how-style7 .how-arrow{ color:#ffd700; }
-
-    /* CLICK FX */
     .click-active{ transform:scale(0.93) !important; transition:transform 0.08s ease-out !important; }
     .fire-particle{ position:fixed; pointer-events:none; border-radius:50%; z-index:10000; animation:fire-burst var(--dur,0.7s) ease-out forwards; }
     @keyframes fire-burst{ 0%{transform:translate(-50%,-50%) scale(1);opacity:1} 100%{transform:translate(calc(-50% + var(--tx)),calc(-50% + var(--ty))) scale(0);opacity:0} }
@@ -313,15 +237,11 @@
     <div class="token-box">
         <div class="token-title">🔑 ACCESS CODE</div>
         <div class="token-sub">Enter your ad-free access token</div>
-
-        <!-- Input panel (shown when no active token) -->
         <div id="token-input-panel">
             <input type="text" id="token-input" class="token-input" placeholder="Paste the code here...">
             <button id="token-submit" class="token-submit">✦ Verify Code</button>
             <div id="token-msg" class="token-msg"></div>
         </div>
-
-        <!-- Status panel (shown when active token exists) — NO REVOKE BUTTON -->
         <div id="token-status-view" class="token-status-view">
             <div class="token-active-badge">
                 <div class="token-active-dot"></div>
@@ -330,18 +250,26 @@
             <div class="token-time-big" id="token-time-big">--:--:--</div>
             <div class="token-time-sub">Time Remaining</div>
         </div>
-
         <button id="token-close" class="token-close">✕ Close</button>
     </div>
 </div>
 
-<!-- AD OVERLAY A (Original Design) -->
+<!-- AD OVERLAY -->
 <div id="ad-overlay" class="ad-overlay hidden">
     <div class="ad-note">
         <span>🙏 Please cooperate with us</span><br>
         These ads help us bring you anime regularly &amp; keep the platform free.<br>
         <span>Your support keeps us going — thank you! ✨</span>
     </div>
+
+    <!-- ✅ PAGE COUNTER + PROGRESS BAR -->
+    <div class="ad-page-strip">
+        <div class="ad-page-label" id="ad-page-label">AD 1 OF 1</div>
+        <div class="ad-page-bar-track">
+            <div class="ad-page-bar-fill" id="ad-page-bar-fill" style="width:100%"></div>
+        </div>
+    </div>
+
     <div class="ad-counter-wrap">
         <div class="ad-counter" id="ad-counter">1 OF 1</div>
         <div class="ad-dots" id="ad-dots"></div>
@@ -369,63 +297,6 @@
                 <div class="btn-sublabel">All ads done — enjoy! ✨</div>
             </div>
             <div class="btn-icon-wrap"><i class="fas fa-play"></i></div>
-        </div>
-    </div>
-</div>
-
-<!-- AD OVERLAY B (New Design - Screenshot Style) -->
-<div id="ad-overlay-b" class="ad-overlay-b hidden">
-    <div class="adb-topbar">
-        <div class="adb-brand">ANIME FANZ FZ</div>
-        <div class="adb-dots-wrap" id="adb-dots-wrap"></div>
-    </div>
-    <div class="adb-note">
-        <span class="adb-note-hl">🙏 Please cooperate with us</span><br>
-        These ads help us bring you anime regularly &amp; keep the platform free.<br>
-        <span class="adb-note-hl">Your support keeps us going — thank you! ✨</span>
-    </div>
-    <div class="adb-progress-bar-wrap">
-        <div class="adb-progress-step" id="adb-counter">1 OF 3</div>
-        <div class="adb-progress-track">
-            <div class="adb-progress-fill" id="adb-progress-fill" style="width:33%"></div>
-        </div>
-    </div>
-    <div class="adb-card" id="adb-card">
-        <div class="adb-tv-icon">📺</div>
-        <div class="adb-ad-label" id="adb-ad-label">AD 1 OF 3</div>
-        <div class="adb-card-text" id="adb-card-text">
-            Please visit <span class="adb-card-link" id="adb-card-link">AD LINK</span><br>
-            then come back and wait for the timer.<br>
-            Press <b>Continue</b> when ready.
-        </div>
-        <div class="adb-card-hint" id="adb-video-wrap"></div>
-    </div>
-    <div class="adb-timer-wrap">
-        <div class="adb-timer-ring">
-            <svg width="70" height="70" viewBox="0 0 70 70">
-                <defs>
-                    <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:var(--purple)"/>
-                        <stop offset="100%" style="stop-color:var(--cyan)"/>
-                    </linearGradient>
-                </defs>
-                <circle class="adb-track" cx="35" cy="35" r="30"/>
-                <circle class="adb-progress" id="adb-timer-circle" cx="35" cy="35" r="30" stroke-dasharray="188.5" stroke-dashoffset="0"/>
-            </svg>
-            <div class="adb-timer-num-b" id="adb-timer-num">10</div>
-        </div>
-        <div class="adb-timer-label">SECONDS REMAINING</div>
-    </div>
-    <button class="adb-continue hidden" id="adb-continue">Continue →</button>
-    <div class="adb-finish hidden" id="adb-finish">
-        <div class="adb-finish-emoji">🎉 &nbsp; 🎊 &nbsp; 🎉</div>
-        <div id="adb-open-btn" class="adb-open-btn" oncontextmenu="return false">
-            <span class="adb-btn-accent"></span>
-            <div class="adb-btn-text">
-                <div class="adb-btn-label">Open Anime 🎌</div>
-                <div class="adb-btn-sub">All ads done — enjoy! ✨</div>
-            </div>
-            <div class="adb-btn-icon"><i class="fas fa-play"></i></div>
         </div>
     </div>
 </div>
@@ -490,44 +361,30 @@
 </div>
 
 <script>
-/* ╔═══════════════════════════════════════════════════════════════════╗
-   ║                  ★ EDIT GUIDE — LINE NUMBERS ★                  ║
-   ╠═══════════════════════════════════════════════════════════════════╣
-   ║                                                                   ║
-   ║  ⏱️  AD TIMER (kitne seconds):                                    ║
-   ║      Line ~340  →  const AD_TIMER_SECONDS = 10                   ║
-   ║                                                                   ║
-   ║  📺  DEFAULT ADS:                                                  ║
-   ║      Line ~345  →  const DEFAULT_ADS = [...]                     ║
-   ║                                                                   ║
-   ║  🔑  AD-FREE TOKENS:                                              ║
-   ║      Line ~355  →  const AD_FREE_TOKENS = [...]                  ║
-   ║                   Format: { code:"TOKEN", hours:24 }             ║
-   ║                   hours: 0 = kabhi expire nahi (permanent)       ║
-   ║                                                                   ║
-   ╚═══════════════════════════════════════════════════════════════════╝ */
-
 /* ════════════════════════════════════════
    ⚙️ CONFIG — EDIT KARO YAHAN
 ════════════════════════════════════════ */
 
+// ⏱️ AD TIMER
 const AD_TIMER_SECONDS = 10;
 
+// 📺 DEFAULT ADS
 const DEFAULT_ADS = [
     "https://pjzqlvffxwrqfdcsyctk.supabase.co/storage/v1/object/public/Ads/VID_20260221_114930_387.mp4",
     "https://chatgpt.com/?utm_source=google&utm_medium=paid_search&utm_campaign=GOOG_C_SEM_GBR_Core_CHT_BAU_ACQ_PER_MIX_ALL_APAC_IN_EN_032525&c_id=22370388714&c_agid=177344203375&c_crid=741704613504&c_kwid=%7Bkeywordid%7D&c_ims=&c_pms=9181884&c_nw=g&c_dvc=m&gad_source=1&gad_campaignid=22370388714&gclid=CjwKCAiAzOXMBhASEiwAe14SaRFUipyUDT5HM4-SKrfhh6-tijxT3Zi2fJials5s8Qj99-jDDY07AhoCOx0QAvD_BwE",
     "https://pjzqlvffxwrqfdcsyctk.supabase.co/storage/v1/object/public/Ads/VID_20260221_114902_817.mp4",
 ];
 
+// 🔑 AD-FREE TOKENS
 const AD_FREE_TOKENS = [
-    { code: "{=}098",       hours: 23  },
-    { code: "ANIME-FREE-002", minutes: 48  },
+    { code: "{=}098",         hours: 23  },
+    { code: "ANIME-FREE-002", hours: 48  },
     { code: "ANIME-FREE-003", hours: 168 },
     { code: "FANZFZ-VIP-001", hours: 720 },
     { code: "FANZFZ-VIP-002", hours: 0   },
 ];
-/*fir permanent add free 0 hrs*/
 
+// 🖼️ START BUTTON IMAGES
 const IMAGE_LIST = [
     "https://pjzqlvffxwrqfdcsyctk.supabase.co/storage/v1/object/public/Imeages/IMG_20260217_231836_040.jpg",
     "https://pjzqlvffxwrqfdcsyctk.supabase.co/storage/v1/object/public/Imeages/276e81240748fb6714190262a5b82b9c.jpg",
@@ -547,6 +404,7 @@ const IMAGE_LIST = [
     "https://pjzqlvffxwrqfdcsyctk.supabase.co/storage/v1/object/public/Imeages/IMG_20260220_223748_572.jpg",
 ];
 
+// 🔊 CLICK SOUNDS
 const SOUND_LIST = [
     "https://files.catbox.moe/6h33lc.mp3",
     "https://files.catbox.moe/wzj0v9.mp3",
@@ -567,128 +425,73 @@ const SETTINGS = {
 
 /* ════════════════════════════════════════
    🔑 TOKEN SYSTEM
-   - Ek token ek baar use ho sakta hai
-   - Jis device ne use kiya woh localStorage mein saved rahega
-   - Website yaad rakhti hai har visit pe — dobara enter nahi karna
 ════════════════════════════════════════ */
-const TOKEN_STORE_KEY    = 'afz_token_v2';
-const TOKEN_USED_KEY     = 'afz_used_codes_v2'; // All codes used on this device
-const TOKEN_GLOBAL_KEY   = 'afz_used_global';   // For cross-device block simulation
+const TOKEN_STORE_KEY  = 'afz_token_v2';
+const TOKEN_USED_KEY   = 'afz_used_codes_v2';
+const TOKEN_GLOBAL_KEY = 'afz_used_global';
 
 function saveActiveToken(code, hours) {
     const activatedAt = Date.now();
     const expiresAt   = hours === 0 ? 0 : activatedAt + (hours * 60 * 60 * 1000);
-    localStorage.setItem(TOKEN_STORE_KEY, JSON.stringify({
-        code: code.toUpperCase(), activatedAt, expiresAt
-    }));
-    // Also record in used list for this device
+    localStorage.setItem(TOKEN_STORE_KEY, JSON.stringify({ code: code.toUpperCase(), activatedAt, expiresAt }));
     markCodeUsed(code);
 }
-
-function getStoredToken() {
-    try { return JSON.parse(localStorage.getItem(TOKEN_STORE_KEY)); }
-    catch { return null; }
-}
-
+function getStoredToken() { try { return JSON.parse(localStorage.getItem(TOKEN_STORE_KEY)); } catch { return null; } }
 function isAdFreeUser() {
     const data = getStoredToken();
     if (!data) return false;
     if (data.expiresAt === 0) return true;
     return Date.now() < data.expiresAt;
 }
-
-function revokeExpiredToken() {
-    // Only remove if actually expired — not manual revoke
-    if (!isAdFreeUser()) {
-        localStorage.removeItem(TOKEN_STORE_KEY);
-    }
-}
-
-function isTokenUsedByThis(code) {
-    const data = getStoredToken();
-    return data && data.code === code.toUpperCase();
-}
-
+function revokeExpiredToken() { if (!isAdFreeUser()) localStorage.removeItem(TOKEN_STORE_KEY); }
+function isTokenUsedByThis(code) { const data = getStoredToken(); return data && data.code === code.toUpperCase(); }
 function markCodeUsed(code) {
-    // Device-level used list
-    let usedLocal = [];
-    try { usedLocal = JSON.parse(localStorage.getItem(TOKEN_USED_KEY) || '[]'); } catch {}
     const upper = code.toUpperCase();
-    if (!usedLocal.includes(upper)) {
-        usedLocal.push(upper);
-        localStorage.setItem(TOKEN_USED_KEY, JSON.stringify(usedLocal));
-    }
-    // Global used list (same localStorage on same browser — acts as site-wide block)
-    let usedGlobal = [];
-    try { usedGlobal = JSON.parse(localStorage.getItem(TOKEN_GLOBAL_KEY) || '[]'); } catch {}
-    if (!usedGlobal.includes(upper)) {
-        usedGlobal.push(upper);
-        localStorage.setItem(TOKEN_GLOBAL_KEY, JSON.stringify(usedGlobal));
-    }
+    let uL = []; try { uL = JSON.parse(localStorage.getItem(TOKEN_USED_KEY) || '[]'); } catch {}
+    if (!uL.includes(upper)) { uL.push(upper); localStorage.setItem(TOKEN_USED_KEY, JSON.stringify(uL)); }
+    let uG = []; try { uG = JSON.parse(localStorage.getItem(TOKEN_GLOBAL_KEY) || '[]'); } catch {}
+    if (!uG.includes(upper)) { uG.push(upper); localStorage.setItem(TOKEN_GLOBAL_KEY, JSON.stringify(uG)); }
 }
-
 function isCodeAlreadyUsedGlobally(code) {
-    try {
-        const usedGlobal = JSON.parse(localStorage.getItem(TOKEN_GLOBAL_KEY) || '[]');
-        return usedGlobal.includes(code.toUpperCase());
-    } catch { return false; }
+    try { return JSON.parse(localStorage.getItem(TOKEN_GLOBAL_KEY) || '[]').includes(code.toUpperCase()); } catch { return false; }
 }
-
-function findToken(code) {
-    return AD_FREE_TOKENS.find(t => t.code.toUpperCase() === code.toUpperCase());
-}
-
+function findToken(code) { return AD_FREE_TOKENS.find(t => t.code.toUpperCase() === code.toUpperCase()); }
 function formatTimeLeft(expiresAt) {
     if (expiresAt === 0) return 'PERMANENT';
     const diff = expiresAt - Date.now();
     if (diff <= 0) return 'EXPIRED';
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
+    const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000),
+          m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
     if (d > 0) return `${d}d ${h}h ${m}m`;
     if (h > 0) return `${h}h ${m}m ${s}s`;
     return `${m}m ${s}s`;
 }
-
 function updateKeyIcon() {
     const keyEl = document.getElementById('key-icon');
     revokeExpiredToken();
-    if (isAdFreeUser()) {
-        keyEl.classList.add('token-active');
-        keyEl.querySelector('i').className = 'fas fa-shield-alt';
-    } else {
-        keyEl.classList.remove('token-active');
-        keyEl.querySelector('i').className = 'fas fa-key';
-    }
+    if (isAdFreeUser()) { keyEl.classList.add('token-active'); keyEl.querySelector('i').className = 'fas fa-shield-alt'; }
+    else { keyEl.classList.remove('token-active'); keyEl.querySelector('i').className = 'fas fa-key'; }
 }
 
 let tokenCountdownInt = null;
-
 function startTokenCountdown() {
     clearInterval(tokenCountdownInt);
-    const data = getStoredToken();
-    if (!data) return;
+    const data = getStoredToken(); if (!data) return;
     const update = () => {
         if (!isAdFreeUser()) {
-            revokeExpiredToken();
-            updateKeyIcon();
-            clearInterval(tokenCountdownInt);
+            revokeExpiredToken(); updateKeyIcon(); clearInterval(tokenCountdownInt);
             document.getElementById('token-status-view').classList.remove('visible');
             document.getElementById('token-input-panel').style.display = 'block';
-            document.getElementById('token-msg').textContent = '⏰ Token is expired!';
-            document.getElementById('token-msg').className = 'token-msg error';
-            return;
+            document.getElementById('token-msg').textContent = '⏰ Token expire ho gaya!';
+            document.getElementById('token-msg').className = 'token-msg error'; return;
         }
         document.getElementById('token-time-big').textContent = formatTimeLeft(data.expiresAt);
     };
-    update();
-    tokenCountdownInt = setInterval(update, 1000);
+    update(); tokenCountdownInt = setInterval(update, 1000);
 }
 
 document.getElementById('key-icon').addEventListener('click', () => {
-    const modal = document.getElementById('token-modal');
-    modal.classList.remove('hidden');
+    document.getElementById('token-modal').classList.remove('hidden');
     if (isAdFreeUser()) {
         document.getElementById('token-input-panel').style.display = 'none';
         document.getElementById('token-msg').textContent = '';
@@ -700,84 +503,48 @@ document.getElementById('key-icon').addEventListener('click', () => {
         document.getElementById('token-input').focus();
     }
 });
-
 document.getElementById('token-close').addEventListener('click', () => {
     document.getElementById('token-modal').classList.add('hidden');
     document.getElementById('token-msg').textContent = '';
     document.getElementById('token-input').value = '';
     clearInterval(tokenCountdownInt);
 });
-
 document.getElementById('token-submit').addEventListener('click', () => {
-    const val   = document.getElementById('token-input').value.trim();
+    const val = document.getElementById('token-input').value.trim();
     const msgEl = document.getElementById('token-msg');
-
     if (!val) { msgEl.textContent = '⚠️ Code empty hai!'; msgEl.className = 'token-msg error'; return; }
-
     const tokenDef = findToken(val);
     if (!tokenDef) { msgEl.textContent = '❌ Invalid code!'; msgEl.className = 'token-msg error'; return; }
-
-    // Check if already used by this device AND it's a different token than active
     if (isCodeAlreadyUsedGlobally(val) && !isTokenUsedByThis(val)) {
-        msgEl.textContent = '⚠️ Yeh code pehle use ho chuka hai!';
-        msgEl.className = 'token-msg error';
-        return;
+        msgEl.textContent = '⚠️ Yeh code pehle use ho chuka hai!'; msgEl.className = 'token-msg error'; return;
     }
-
-    // If this device already has the SAME token active — just show status
     if (isTokenUsedByThis(val) && isAdFreeUser()) {
-        msgEl.textContent = '✅ Yeh token pehle se active hai!';
-        msgEl.className = 'token-msg success';
-        return;
+        msgEl.textContent = '✅ Yeh token pehle se active hai!'; msgEl.className = 'token-msg success'; return;
     }
-
-    saveActiveToken(val, tokenDef.hours);
-    updateKeyIcon();
-    msgEl.textContent = tokenDef.hours === 0
-        ? '✅ Permanent Ad-Free active! 🎌'
-        : `✅ Ad-Free active for ${tokenDef.hours}h! Enjoy 🎌`;
+    saveActiveToken(val, tokenDef.hours); updateKeyIcon();
+    msgEl.textContent = tokenDef.hours === 0 ? '✅ Permanent Ad-Free active! 🎌' : `✅ Ad-Free active for ${tokenDef.hours}h! Enjoy 🎌`;
     msgEl.className = 'token-msg success';
-
-    setTimeout(() => {
-        document.getElementById('token-modal').classList.add('hidden');
-        document.getElementById('token-input').value = '';
-    }, 1800);
+    setTimeout(() => { document.getElementById('token-modal').classList.add('hidden'); document.getElementById('token-input').value = ''; }, 1800);
 });
-
-// On page load
 updateKeyIcon();
 setInterval(updateKeyIcon, 60000);
 
 /* ════════════════════════════════════════
-   📺 AD SYSTEM — Design A & B
-   Random decide hoga kaun sa dikhega
+   📺 AD SYSTEM
 ════════════════════════════════════════ */
-let adList     = [];
-let adIndex    = 0;
-let targetUrl  = '';
-let adTimerInt = null;
-let adTimerSec = AD_TIMER_SECONDS;
-let videoMuted = false;
-let activeDesign = 'A'; // 'A' or 'B'
+let adList = [], adIndex = 0, targetUrl = '', adTimerInt = null, adTimerSec = AD_TIMER_SECONDS, videoMuted = false;
 
-function isVideoUrl(url) {
-    return ['.mp4','.webm','.ogg','.mov','.m4v'].some(e => url.toLowerCase().includes(e));
-}
-
+function isVideoUrl(url) { return ['.mp4','.webm','.ogg','.mov','.m4v'].some(e => url.toLowerCase().includes(e)); }
 function getAdsFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const adsParam = params.get('ads');
     if (!adsParam) return { mode: 'default' };
     if (adsParam === 'free') return { mode: 'free' };
-    try {
-        const arr = JSON.parse(atob(adsParam));
-        if (Array.isArray(arr) && arr.length > 0) return { mode: 'custom', ads: arr };
-    } catch(e) {}
+    try { const arr = JSON.parse(atob(adsParam)); if (Array.isArray(arr) && arr.length > 0) return { mode: 'custom', ads: arr }; } catch(e) {}
     return { mode: 'default' };
 }
 
-// ─── DESIGN A ───────────────────────────────────────────────────────────────
-function buildAdDots_A(total, currentIdx) {
+function buildAdDots(total, currentIdx) {
     const dotsEl = document.getElementById('ad-dots');
     dotsEl.innerHTML = '';
     for (let i = 0; i < total; i++) {
@@ -787,11 +554,18 @@ function buildAdDots_A(total, currentIdx) {
     }
 }
 
-function showAdPage_A(idx) {
+// ✅ Update both counter text AND progress bar
+function updatePageCounter(idx, total) {
+    document.getElementById('ad-page-label').textContent = `AD ${idx+1} OF ${total}`;
+    document.getElementById('ad-page-bar-fill').style.width = `${((idx+1)/total)*100}%`;
+    document.getElementById('ad-counter').textContent = `${idx+1} OF ${total}`;
+}
+
+function showAdPage(idx) {
     const total = adList.length;
     adIndex = idx;
-    document.getElementById('ad-counter').textContent = `${idx+1} OF ${total}`;
-    buildAdDots_A(total, idx);
+    updatePageCounter(idx, total);
+    buildAdDots(total, idx);
 
     const wrap = document.getElementById('ad-content-wrap');
     const url  = adList[idx];
@@ -799,16 +573,13 @@ function showAdPage_A(idx) {
     if (isVideoUrl(url)) {
         wrap.innerHTML = `
             <video class="ad-video" id="ad-video-el" src="${url}" autoplay playsinline loop></video>
-            <div class="ad-mute-btn" id="ad-mute-btn">
-                <i class="fas fa-volume-up"></i>
-            </div>`;
+            <div class="ad-mute-btn" id="ad-mute-btn"><i class="fas fa-volume-up"></i></div>`;
         const vid = document.getElementById('ad-video-el');
         const muteBtn = document.getElementById('ad-mute-btn');
         vid.muted = videoMuted;
         muteBtn.querySelector('i').className = videoMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
         muteBtn.addEventListener('click', () => {
-            videoMuted = !videoMuted;
-            vid.muted = videoMuted;
+            videoMuted = !videoMuted; vid.muted = videoMuted;
             muteBtn.querySelector('i').className = videoMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
         });
     } else {
@@ -818,8 +589,7 @@ function showAdPage_A(idx) {
             <div class="ad-link-title">AD ${idx+1} OF ${total}</div>
             <div class="ad-link-text">
                 Please visit <a class="ad-link-hyperlink" href="${url}" target="_blank" rel="noopener">AD LINK</a><br>
-                wait for 10 second then come back and wait for the timer.<br>
-                Press <b>Continue</b> when ready.
+                Wait for the timer then press <b>Continue</b>.
             </div>
         </div>`;
         setTimeout(() => { window.open(url, '_blank'); }, 300);
@@ -827,10 +597,10 @@ function showAdPage_A(idx) {
 
     document.getElementById('ad-continue').classList.add('hidden');
     document.getElementById('ad-finish').classList.add('hidden');
-    startAdTimer_A(idx, total);
+    startAdTimer(idx, total);
 }
 
-function startAdTimer_A(idx, total) {
+function startAdTimer(idx, total) {
     clearInterval(adTimerInt);
     adTimerSec = AD_TIMER_SECONDS;
     const circumference = 144.51;
@@ -842,154 +612,75 @@ function startAdTimer_A(idx, total) {
         if (adTimerSec <= 0) {
             clearInterval(adTimerInt);
             if (idx + 1 < total) document.getElementById('ad-continue').classList.remove('hidden');
-            else showFinish_A();
+            else showFinish();
         }
         adTimerSec--;
     }
-    tick();
-    adTimerInt = setInterval(tick, 1000);
+    tick(); adTimerInt = setInterval(tick, 1000);
 }
 
-function showFinish_A() {
+function showFinish() {
     document.getElementById('ad-finish').classList.remove('hidden');
     document.getElementById('ad-open-btn').dataset.href = targetUrl;
     launchConfetti();
 }
 
-// ─── DESIGN B ───────────────────────────────────────────────────────────────
-function buildAdDots_B(total, currentIdx) {
-    const wrap = document.getElementById('adb-dots-wrap');
-    wrap.innerHTML = '';
-    for (let i = 0; i < total; i++) {
-        const d = document.createElement('div');
-        d.className = 'adb-dot ' + (i < currentIdx ? 'adb-done' : i === currentIdx ? 'adb-active' : 'adb-pending');
-        wrap.appendChild(d);
-    }
-}
-
-function showAdPage_B(idx) {
-    const total = adList.length;
-    adIndex = idx;
-    document.getElementById('adb-counter').textContent = `${idx+1} OF ${total}`;
-    document.getElementById('adb-ad-label').textContent = `AD ${idx+1} OF ${total}`;
-    buildAdDots_B(total, idx);
-    // Progress bar
-    document.getElementById('adb-progress-fill').style.width = `${((idx+1)/total)*100}%`;
-
-    const url = adList[idx];
-    const videoWrap = document.getElementById('adb-video-wrap');
-    const cardText  = document.getElementById('adb-card-text');
-    const cardLink  = document.getElementById('adb-card-link');
-
-    if (isVideoUrl(url)) {
-        // Show video inside card
-        cardText.innerHTML = `Watch the ad below.`;
-        cardLink.style.display = 'none';
-        videoWrap.innerHTML = `
-            <video style="width:100%;border-radius:12px;margin-top:10px;" id="adb-video-el" src="${url}" autoplay playsinline loop></video>
-            <div class="ad-mute-btn" id="adb-mute-btn" style="position:relative;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,0.55);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;margin:8px auto 0;">
-                <i class="fas fa-volume-up"></i>
-            </div>`;
-        const vid = document.getElementById('adb-video-el');
-        const muteBtn = document.getElementById('adb-mute-btn');
-        vid.muted = videoMuted;
-        muteBtn.querySelector('i').className = videoMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
-        muteBtn.addEventListener('click', () => {
-            videoMuted = !videoMuted;
-            vid.muted = videoMuted;
-            muteBtn.querySelector('i').className = videoMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
-        });
-    } else {
-        videoWrap.innerHTML = '';
-        cardLink.style.display = 'inline';
-        cardText.innerHTML = `Please visit <span class="adb-card-link" id="adb-card-link" style="color:var(--cyan);text-decoration:underline;font-weight:700;cursor:pointer;" onclick="window.open('${url}','_blank')">AD LINK</span><br>then come back and wait for the timer.<br>Press <b>Continue</b> when ready.`;
-        setTimeout(() => { window.open(url, '_blank'); }, 300);
-    }
-
-    document.getElementById('adb-continue').classList.add('hidden');
-    document.getElementById('adb-finish').classList.add('hidden');
-    startAdTimer_B(idx, total);
-}
-
-function startAdTimer_B(idx, total) {
-    clearInterval(adTimerInt);
-    adTimerSec = AD_TIMER_SECONDS;
-    const circumference = 188.5;
-    const circle = document.getElementById('adb-timer-circle');
-    const numEl  = document.getElementById('adb-timer-num');
-    function tick() {
-        numEl.textContent = adTimerSec;
-        circle.style.strokeDashoffset = circumference - (adTimerSec / AD_TIMER_SECONDS) * circumference;
-        if (adTimerSec <= 0) {
-            clearInterval(adTimerInt);
-            if (idx + 1 < total) document.getElementById('adb-continue').classList.remove('hidden');
-            else showFinish_B();
-        }
-        adTimerSec--;
-    }
-    tick();
-    adTimerInt = setInterval(tick, 1000);
-}
-
-function showFinish_B() {
-    document.getElementById('adb-finish').classList.remove('hidden');
-    document.getElementById('adb-open-btn').dataset.href = targetUrl;
-}
-
-// ─── AD FLOW CONTROLLER ─────────────────────────────────────────────────────
 function startAdFlow(ads, destUrl) {
-    adList    = ads;
-    targetUrl = destUrl;
-    // Random design choice
-    activeDesign = Math.random() < 0.5 ? 'A' : 'B';
-    if (activeDesign === 'A') {
-        document.getElementById('ad-overlay').classList.remove('hidden');
-        showAdPage_A(0);
-    } else {
-        document.getElementById('ad-overlay-b').classList.remove('hidden');
-        showAdPage_B(0);
-    }
+    adList = ads; targetUrl = destUrl;
+    document.getElementById('ad-overlay').classList.remove('hidden');
+    // Push state so browser back closes ad instead of leaving page
+    history.pushState({ adOpen: true }, '');
+    showAdPage(0);
 }
 
-// Continue buttons
 document.getElementById('ad-continue').addEventListener('click', () => {
     playSound();
-    if (adIndex + 1 < adList.length) showAdPage_A(adIndex + 1);
-});
-document.getElementById('adb-continue').addEventListener('click', () => {
-    playSound();
-    if (adIndex + 1 < adList.length) showAdPage_B(adIndex + 1);
+    if (adIndex + 1 < adList.length) showAdPage(adIndex + 1);
 });
 
-// Open Anime buttons
-function handleOpenBtnClick(e, btnEl) {
-    e.preventDefault();
-    playSound();
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+document.getElementById('ad-open-btn').addEventListener('click', function(e) {
+    e.preventDefault(); playSound();
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback)
         window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-    }
     spawnParticles(e.clientX || window.innerWidth/2, e.clientY || window.innerHeight/2);
-    btnEl.style.transform = 'scale(0.95)';
-    setTimeout(() => { btnEl.style.transform = ''; }, 150);
-    const dest = btnEl.dataset.href;
+    this.style.transform = 'scale(0.95)';
+    setTimeout(() => { this.style.transform = ''; }, 150);
+    const dest = this.dataset.href;
     if (dest) setTimeout(() => { window.location.href = dest; }, 200);
-}
-document.getElementById('ad-open-btn').addEventListener('click', function(e) { handleOpenBtnClick(e, this); });
-document.getElementById('adb-open-btn').addEventListener('click', function(e) { handleOpenBtnClick(e, this); });
+});
 
 /* ════════════════════════════════════════
-   CONFETTI (Design A)
+   ✅ BACK BUTTON FIX
+   — Ad chal raha ho aur user back press kare
+     toh ad band ho, page start pe na jaaye
+════════════════════════════════════════ */
+// Initial state — ad closed
+history.replaceState({ adOpen: false }, '');
+
+window.addEventListener('popstate', (e) => {
+    const overlay = document.getElementById('ad-overlay');
+    if (!overlay.classList.contains('hidden')) {
+        // Ad band karo, page pe raho
+        clearInterval(adTimerInt);
+        overlay.classList.add('hidden');
+        // Push fresh state so next back still works correctly
+        history.pushState({ adOpen: false }, '');
+    } else {
+        // Ad nahi chal raha — Telegram se close
+        tg.close();
+    }
+});
+
+/* ════════════════════════════════════════
+   CONFETTI
 ════════════════════════════════════════ */
 function launchConfetti() {
     const cols = ['#ff6a00','#ff007a','#00ffe0','#9b00ff','#ffd700','#ffffff'];
     ['confetti-left','confetti-right'].forEach((id, side) => {
-        const el = document.getElementById(id);
-        el.innerHTML = '';
+        const el = document.getElementById(id); el.innerHTML = '';
         for (let i = 0; i < 12; i++) {
-            const p = document.createElement('div');
-            p.className = 'confetti-piece';
-            const cx = (side === 0 ? 1 : -1) * (Math.random() * 80 + 20);
-            const cy = -(Math.random() * 120 + 40);
+            const p = document.createElement('div'); p.className = 'confetti-piece';
+            const cx = (side === 0 ? 1 : -1) * (Math.random() * 80 + 20), cy = -(Math.random() * 120 + 40);
             p.style.cssText = `background:${cols[Math.floor(Math.random()*cols.length)]};left:${Math.random()*30}px;top:${Math.random()*20}px;width:${Math.random()*8+4}px;height:${Math.random()*8+4}px;--cx:${cx}px;--cy:${cy}px;animation-delay:${Math.random()*0.4}s;animation-duration:${Math.random()*0.5+0.9}s;`;
             el.appendChild(p);
         }
@@ -1001,54 +692,43 @@ function launchConfetti() {
 ════════════════════════════════════════ */
 let lastImgIndex = 0;
 function getNextImage() {
-    let idx;
-    do { idx = Math.floor(Math.random() * IMAGE_LIST.length); }
-    while (idx === lastImgIndex && IMAGE_LIST.length > 1);
-    lastImgIndex = idx;
-    return IMAGE_LIST[idx];
+    let idx; do { idx = Math.floor(Math.random() * IMAGE_LIST.length); } while (idx === lastImgIndex && IMAGE_LIST.length > 1);
+    lastImgIndex = idx; return IMAGE_LIST[idx];
 }
 document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('main-btn');
-    if (btn) {
-        lastImgIndex = Math.floor(Math.random() * IMAGE_LIST.length);
-        btn.style.backgroundImage = `url('${IMAGE_LIST[lastImgIndex]}')`;
-    }
+    if (btn) { lastImgIndex = Math.floor(Math.random() * IMAGE_LIST.length); btn.style.backgroundImage = `url('${IMAGE_LIST[lastImgIndex]}')`; }
 });
 
-/* ════════════════════════════════════════
-   HOW TO OPEN BUTTON
-════════════════════════════════════════ */
+/* HOW TO OPEN BUTTON */
 (function injectHowBtn() {
     const url = "https://t.me/Anime_fanz_watching/8";
     const style = Math.random() < 0.5 ? 5 : 7;
-    const inner = `
-        <div class="how-btn-left">
-            <div class="how-icon"><i class="fas fa-play"></i></div>
-            <div><div class="how-title">How to open the Anime</div><div class="how-sub">Tap to learn 🎬</div></div>
-        </div>
-        <div class="how-arrow"><i class="fas fa-chevron-right"></i></div>`;
+    const inner = `<div class="how-btn-left"><div class="how-icon"><i class="fas fa-play"></i></div><div><div class="how-title">How to open the Anime</div><div class="how-sub">Tap to learn 🎬</div></div></div><div class="how-arrow"><i class="fas fa-chevron-right"></i></div>`;
     document.getElementById('how-btn-container').innerHTML = style === 5
         ? `<div class="how-style5-wrap"><a href="${url}" class="how-btn tap-btn">${inner}</a></div>`
         : `<a href="${url}" class="how-btn how-style7 tap-btn">${inner}</a>`;
 })();
 
-/* ════════════════════════════════════════
-   TELEGRAM + SOUND
-════════════════════════════════════════ */
+/* TELEGRAM + SOUND */
 const tg = window.Telegram.WebApp;
 tg.expand(); tg.ready();
 tg.BackButton.show();
-tg.BackButton.onClick(() => tg.close());
+tg.BackButton.onClick(() => {
+    // If ad is open, close ad. Otherwise close tg.
+    const overlay = document.getElementById('ad-overlay');
+    if (!overlay.classList.contains('hidden')) {
+        clearInterval(adTimerInt);
+        overlay.classList.add('hidden');
+    } else { tg.close(); }
+});
 const audioEl = document.getElementById('click-sound');
 function playSound() {
     audioEl.src = SOUND_LIST[Math.floor(Math.random() * SOUND_LIST.length)];
-    audioEl.currentTime = 0;
-    audioEl.play().catch(() => {});
+    audioEl.currentTime = 0; audioEl.play().catch(() => {});
 }
 
-/* ════════════════════════════════════════
-   TITLE LOGIC
-════════════════════════════════════════ */
+/* TITLE LOGIC */
 (function initTitle() {
     try {
         const params = new URLSearchParams(window.location.search);
@@ -1062,66 +742,47 @@ function playSound() {
     } catch(e) {}
 })();
 
-/* ════════════════════════════════════════
-   SPARKLES
-════════════════════════════════════════ */
+/* SPARKLES */
 const colors = ['#ff6a00','#ff007a','#00ffe0','#9b00ff','#ffffff'];
 setInterval(() => {
-    const s = document.createElement('div');
-    s.className = 'sparkle';
+    const s = document.createElement('div'); s.className = 'sparkle';
     const sz = Math.random() * 3 + 2;
     s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}vw;bottom:${Math.random()*20}vh;background:${colors[Math.floor(Math.random()*colors.length)]};box-shadow:0 0 8px currentColor;animation-duration:${Math.random()*3+3}s;`;
-    document.body.appendChild(s);
-    setTimeout(() => s.remove(), 6000);
+    document.body.appendChild(s); setTimeout(() => s.remove(), 6000);
 }, SETTINGS.sparkle_interval);
 
-/* ════════════════════════════════════════
-   CURSOR TRAIL
-════════════════════════════════════════ */
+/* CURSOR TRAIL */
 let trailCount = 0;
 document.addEventListener('mousemove', (e) => {
     if (trailCount++ % 2 !== 0) return;
-    const t = document.createElement('div');
-    t.className = 'cursor-trail';
+    const t = document.createElement('div'); t.className = 'cursor-trail';
     const c = colors[Math.floor(Math.random()*colors.length)];
     t.style.cssText = `left:${e.clientX}px;top:${e.clientY}px;background:${c};box-shadow:0 0 6px ${c};`;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 600);
+    document.body.appendChild(t); setTimeout(() => t.remove(), 600);
 });
 
-/* ════════════════════════════════════════
-   CLICK PARTICLES
-════════════════════════════════════════ */
+/* CLICK PARTICLES */
 function spawnParticles(cx, cy) {
-    const ring = document.createElement('div');
-    ring.className = 'click-ring';
-    ring.style.cssText = `left:${cx}px;top:${cy}px;`;
-    document.body.appendChild(ring);
+    const ring = document.createElement('div'); ring.className = 'click-ring';
+    ring.style.cssText = `left:${cx}px;top:${cy}px;`; document.body.appendChild(ring);
     setTimeout(() => ring.remove(), 500);
     const fireColors = [['#ffcc00','#ff8800','#ff4400'],['#ff00aa','#ff007a','#cc0055'],['#00ffe0','#00aacc','#0077aa']];
     const palette = fireColors[Math.floor(Math.random()*fireColors.length)];
     for (let i = 0; i < SETTINGS.particle_count; i++) {
-        const p = document.createElement('div');
-        p.className = 'fire-particle';
-        const angle = Math.random() * Math.PI * 2;
-        const vel = Math.random() * 130 + 30;
-        const sz = Math.random() * 7 + 3;
+        const p = document.createElement('div'); p.className = 'fire-particle';
+        const angle = Math.random() * Math.PI * 2, vel = Math.random() * 130 + 30, sz = Math.random() * 7 + 3;
         const color = palette[Math.floor(Math.random()*palette.length)];
         p.style.cssText = `left:${cx}px;top:${cy}px;width:${sz}px;height:${sz}px;background:${color};box-shadow:0 0 ${sz*2}px ${color};--tx:${Math.cos(angle)*vel}px;--ty:${Math.sin(angle)*vel}px;--dur:${Math.random()*0.4+0.4}s;`;
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 800);
+        document.body.appendChild(p); setTimeout(() => p.remove(), 800);
     }
 }
 window.addEventListener('click', (e) => spawnParticles(e.clientX, e.clientY));
 
-/* ════════════════════════════════════════
-   START BUTTON
-════════════════════════════════════════ */
+/* START BUTTON */
 document.getElementById('main-btn').addEventListener('click', function() {
     playSound();
     if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
     this.classList.add('click-active');
-
     const bc = document.querySelector('.btn-container');
     bc.classList.remove('bh-firing'); this.classList.remove('bh-img-fire');
     void bc.offsetWidth;
@@ -1135,26 +796,19 @@ document.getElementById('main-btn').addEventListener('click', function() {
         const params = new URLSearchParams(window.location.search);
         const targetParam = params.get('target');
         if (!targetParam) { tg.showPopup({ message: 'Target URL missing!' }); return; }
-
         let destUrl;
         try { destUrl = SETTINGS.use_base64 ? atob(targetParam) : decodeURIComponent(targetParam); }
         catch { tg.showPopup({ message: SETTINGS.error_msg }); return; }
-
         if (isAdFreeUser()) { window.location.href = destUrl; return; }
-
         const adsInfo = getAdsFromUrl();
         if (adsInfo.mode === 'free') { window.location.href = destUrl; return; }
-
         const adsToShow = adsInfo.mode === 'custom' ? adsInfo.ads : DEFAULT_ADS;
         if (!adsToShow || adsToShow.length === 0) { window.location.href = destUrl; return; }
-
         startAdFlow(adsToShow, destUrl);
     }, SETTINGS.rest_interval);
 });
 
-/* ════════════════════════════════════════
-   OTHER BUTTONS
-════════════════════════════════════════ */
+/* OTHER BUTTONS */
 document.querySelectorAll('.tap-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
         e.preventDefault();
@@ -1162,10 +816,7 @@ document.querySelectorAll('.tap-btn').forEach(btn => {
         playSound();
         if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
         this.classList.add('click-active');
-        setTimeout(() => {
-            this.classList.remove('click-active');
-            if (url) window.location.href = url;
-        }, SETTINGS.rest_interval);
+        setTimeout(() => { this.classList.remove('click-active'); if (url) window.location.href = url; }, SETTINGS.rest_interval);
     });
 });
 </script>
